@@ -2,7 +2,7 @@ import { Button, Text } from "react-native-paper";
 import { StyleSheet, Platform, SafeAreaView, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { useRoute } from "@react-navigation/native";
-import { Image, Camera } from "react-native-pytorch-core";
+// import { Image, Camera } from "react-native-pytorch-core";
 
 export default function FoodScreen({ navigation }) {
   async function onCapture(image: Image) {
@@ -11,7 +11,7 @@ export default function FoodScreen({ navigation }) {
   return (
     <View>
       <Text>Find a mole to scan</Text>
-      <Camera style={StyleSheet.absoluteFill} onFrame={onCapture} />
+      {/* <Camera style={StyleSheet.absoluteFill} onFrame={onCapture} /> */}
     </View>
   );
 }
