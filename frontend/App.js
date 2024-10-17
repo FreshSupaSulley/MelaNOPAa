@@ -1,15 +1,15 @@
-import React, { useEffect, useState, createContext } from "react";
-import { Appearance, StatusBar, StyleSheet } from "react-native";
+import React from "react";
+import { Appearance, SafeAreaView, StatusBar } from "react-native";
 import { PaperProvider } from "react-native-paper";
-import Navigation from "./StackNavigator";
 import * as Theme from "./themes";
+import Navigation from "./components/StackNavigator";
 
 export default function App() {
   // Call API
   let colorScheme = Appearance.getColorScheme();
   colorScheme = "dark";
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       {/* Including this seems to theme the bar correctly without any params. Maybe it's based off PaperProvider */}
       <StatusBar />
       <PaperProvider
@@ -17,19 +17,6 @@ export default function App() {
       >
         <Navigation />
       </PaperProvider>
-    </>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "red",
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#f00",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
