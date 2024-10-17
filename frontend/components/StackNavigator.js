@@ -5,7 +5,7 @@ import { Platform, Animated, TouchableOpacity, View } from "react-native";
 import { Button, IconButton, useTheme } from "react-native-paper";
 
 // Screens
-import FoodScreen from "../screens/FoodScreen";
+import CameraScreen from "../screens/CameraScreen";
 import MapScreen from "../screens/MapScreen";
 import SplashScreen from "../screens/SplashScreen";
 
@@ -34,8 +34,8 @@ function Tabs({ navigation }) {
     <Tab.Navigator screenOptions={{ tabBarButton: (props) => <TabButton {...props} />, tabBarShowLabel: false, headerShown: false, tabBarActiveTintColor: theme.colors.primary, tabBarInactiveTintColor: theme.colors.onBackground }}>
       {/* Food screen */}
       <Tab.Screen
-        name="FoodScreen"
-        component={FoodScreen}
+        name="CameraScreen"
+        component={CameraScreen}
         options={{
           tabBarIcon: ({ focused, color }) => (
             <Ionicons name={focused ? "camera" : "camera-outline"} size={iconSize} color={color} />
@@ -50,7 +50,7 @@ function Tabs({ navigation }) {
           title: "Map",
           headerShown: false,
           tabBarIcon: ({ focused, color }) => (
-            <Ionicons name={focused ? "map" : "map-outline"} size={iconSize} color={color} />
+            <Ionicons name={focused ? "information-circle" : "information-circle-outline"} size={iconSize} color={color} />
           ),
         }}
       />
