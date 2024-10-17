@@ -1,2 +1,2 @@
-# MelaNOPAa
-React native app to detect skin cancer
+# MelaNOPEa
+Detect cancer on yo freaky thang 👅👅👅
