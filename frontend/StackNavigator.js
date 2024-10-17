@@ -3,14 +3,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Platform, Animated, TouchableOpacity, View } from "react-native";
 import { Button, IconButton, useTheme } from "react-native-paper";
-import { FoodDataProvider } from "./components/FoodDataContext";
 
 // Screens
 import FoodScreen from "./screens/FoodScreen";
 import MapScreen from "./screens/MapScreen";
-import PostScreen from "./screens/PostScreen";
 import SplashScreen from "./screens/SplashScreen";
-import MapSelectScreen from "./screens/MapSelectScreen";
 
 import ScalablePress from "./components/ScalablePress";
 
@@ -43,7 +40,7 @@ function Tabs({ navigation }) {
         component={FoodScreen}
         options={{
           tabBarIcon: ({ focused, color }) => (
-            <Ionicons name={focused ? "fast-food" : "fast-food-outline"} size={iconSize} color={color} />
+            <Ionicons name={focused ? "camera" : "camera-outline"} size={iconSize} color={color} />
           ),
         }}
       />
@@ -104,22 +101,11 @@ function Navigation() {
   const navigationRef = useRef(null);
   return (
     <NavigationContainer ref={navigationRef}>
-      <FoodDataProvider initialized={() => navigationRef.current.navigate("Main")}>
-        {/* Configure global screen options */}
-        <Stack.Navigator screenOptions={{ gestureEnabled: false, headerShown: false, headerBackTitle: "Back" }}>
-          {/* Splash */}
-          <Stack.Group>
-            <Stack.Screen name="SplashScreen" component={SplashScreen} />
-          </Stack.Group>
-          {/* Content */}
-          <Stack.Screen name="Main" component={Tabs} options={{ animation: 'fade' }} />
-          {/* Popup modal when add button is clicked */}
-          <Stack.Group screenOptions={{ headerTitle: "Share Free Food", headerShown: true, gestureEnabled: true }}>
-            <Stack.Screen name="PostScreen" component={PostScreen} />
-            <Stack.Screen options={{ headerBackTitle: "Cancel", headerTitle: "Select Location" }} name="MapSelectScreen" component={MapSelectScreen} />
-          </Stack.Group>
-        </Stack.Navigator>
-      </FoodDataProvider>
+      {/* Configure global screen options */}
+      <Stack.Navigator screenOptions={{ gestureEnabled: false, headerShown: false, headerBackTitle: "Back" }}>
+        {/* Content */}
+        <Stack.Screen name="Main" component={Tabs} options={{ animation: 'fade' }} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
