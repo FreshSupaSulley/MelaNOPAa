@@ -7,7 +7,7 @@ app.config["UPLOAD_FOLDER"] = "downloads/"
 def home():
     if(request.method == 'POST'):
         file = request.files['file']
-        return jsonify({'message': 'success'})
+        return jsonify({'message': 'melanoma bitch'})
     
 if __name__ == '__main__':
    app.run(port=5000)
