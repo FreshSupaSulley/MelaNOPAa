@@ -6,7 +6,7 @@ import { Button, IconButton, useTheme } from "react-native-paper";
 
 // Screens
 import CameraScreen from "../screens/CameraScreen";
-import MapScreen from "../screens/MapScreen";
+import InfoScreen from "../screens/InfoScreen";
 import SplashScreen from "../screens/SplashScreen";
 
 import ScalablePress from "./ScalablePress";
@@ -44,8 +44,8 @@ function Tabs({ navigation }) {
       />
       {/* Map screen */}
       <Tab.Screen
-        name="MapScreen"
-        component={MapScreen}
+        name="InfoScreen"
+        component={InfoScreen}
         options={{
           title: "Map",
           headerShown: false,
@@ -62,8 +62,9 @@ const Stack = createNativeStackNavigator();
 
 function Navigation() {
   const navigationRef = useRef(null);
+  const theme = useTheme();
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer theme={theme} ref={navigationRef}>
       {/* Configure global screen options */}
       <Stack.Navigator screenOptions={{ gestureEnabled: false, headerShown: false, headerBackTitle: "Back" }}>
         {/* Tutorial */}

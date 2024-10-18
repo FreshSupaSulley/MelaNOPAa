@@ -1,22 +1,23 @@
 import React from "react";
-import { Appearance, SafeAreaView, StatusBar } from "react-native";
+import { Appearance, SafeAreaView, View } from "react-native";
 import { PaperProvider } from "react-native-paper";
-import * as Theme from "./themes";
 import Navigation from "./components/StackNavigator";
+import * as Theme from "./themes";
 
+// App entry point
 export default function App() {
   // Call API
   let colorScheme = Appearance.getColorScheme();
   colorScheme = "dark";
+  // Define theme
+  let theme = colorScheme == "light" ? Theme.lightTheme : Theme.darkTheme
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      {/* Including this seems to theme the bar correctly without any params. Maybe it's based off PaperProvider */}
-      <StatusBar />
-      <PaperProvider
-        theme={colorScheme == "light" ? Theme.lightTheme : Theme.darkTheme}
-      >
-        <Navigation />
-      </PaperProvider>
-    </SafeAreaView>
+    <PaperProvider theme={theme}>
+      <View style={{ backgroundColor: theme.colors.background, flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
+          <Navigation />
+        </SafeAreaView>
+      </View>
+    </PaperProvider>
   );
 }
