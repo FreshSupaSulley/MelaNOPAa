@@ -24,7 +24,7 @@ export default function ResultsScreen({ navigation }) {
 
 
 
-    //DELETE LATER: const data = {aKAIC: 0, bCC: 0, bKLL: 0, dF: 0, mN: 0, pGAH: 0, mel: 0}
+    const data = [0, 0, 0, 0.545, 0, 0, 0];
     const [isCollapsed, setIsCollapsed] = useState(true);
 
     /* Determine most likely type of condition */
@@ -33,29 +33,41 @@ export default function ResultsScreen({ navigation }) {
     switch(indexOfMax){
       case 0:
         potentialType = "Actinic Keratoses and Intraepithelial Carcinomae (Cancerous)";
+        break;
       case 1:
         potentialType = "Basal Cell Carcinoma (Cancerous";
+        break;
       case 2:
         potentialType = "Benign Keratosis-like Lesions (Non-Cancerous)";
+        break;
       case 3:
         potentialType = "Dermatofibroma (Non-Cancerous)";
+        break;
       case 4:
         potentialType = "Melanocytic Nevi (Non-Cancerous)";
+        break;
       case 5:
         potentialType = "Pyogenic Granulomas and Hemorrhage (Can lead to Cancer)";
+        break;
       case 6:
         potentialType = "Melanoma (Cancerous)";
+        break;
     }
-        
+    
+    let risk = ((data[0] + data[1] + data[2] + data[3] + data[4] + data[5] + data[6])*100).toFixed(2);
+
     return (
      <View style = {styles.container}>
         <ScrollView showsVerticalScrollIndicator={false} style={{ padding: 10 }}>
             <Card elevation={5} style={styles.card}>
                 <Text style={styles.title}>
-                    Skin Cancer Risk: {((data[0] + data[1] + data[2] + data[3] + data[4] + data[5] + data[6])*100).toFixed(2)}%
+                    Skin Cancer Risk: {risk}%
                 </Text>
                 <Text style={styles.subtitle}>
-                    Potential Type: {potentialType}
+                    Potential Type:
+                </Text>
+                <Text style={styles.description}>
+                {potentialType}
                 </Text>
             </Card>
 
@@ -64,7 +76,7 @@ export default function ResultsScreen({ navigation }) {
             <Card style={styles.card}>
             <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{marginRight: 'auto'}}>
+                        <Text style={styles.moretitle}>
                             More Details
                         </Text>
                         <IconButton
@@ -88,7 +100,7 @@ export default function ResultsScreen({ navigation }) {
                     </DataTable.Row>
                     <DataTable.Row>
                         <DataTable.Cell style={{flex:4}}><Text>Benign Keratosis-Like Lesion (Non-Cancerous):</Text></DataTable.Cell>
-                        <DataTable.Cell>{((data.[2]*100).toFixed(2))}%</DataTable.Cell>
+                        <DataTable.Cell>{((data[2]*100).toFixed(2))}%</DataTable.Cell>
                     </DataTable.Row>
                     <DataTable.Row>
                         <DataTable.Cell style={{flex:4}}><Text>Dermatofibroma (Non-Cancerous):</Text></DataTable.Cell>
@@ -100,11 +112,11 @@ export default function ResultsScreen({ navigation }) {
                     </DataTable.Row>
                     <DataTable.Row>
                         <DataTable.Cell  style={{flex:4}}><Text>Pyogenic Granulomas and Hemorrhage (Can lead to Cancer):</Text></DataTable.Cell>
-                        <DataTable.Cell>{((data[5].pGAH*100).toFixed(2))}%</DataTable.Cell>
+                        <DataTable.Cell>{((data[5]*100).toFixed(2))}%</DataTable.Cell>
                     </DataTable.Row>
                     <DataTable.Row>
                         <DataTable.Cell style={{flex:4}}><Text>Melanoma (Cancerous):</Text></DataTable.Cell>
-                        <DataTable.Cell>{((data[6].mel*100).toFixed(2))}%</DataTable.Cell>
+                        <DataTable.Cell>{((data[6]*100).toFixed(2))}%</DataTable.Cell>
                     </DataTable.Row>
                 </DataTable>
             </Collapsible>
@@ -125,19 +137,20 @@ const styles = StyleSheet.create({
   },
   card: {
     marginVertical: 10,
-    padding: 10,
+    padding: 20,
   },
   title: {
-    fontSize: 25,
+    fontSize: 23,
     fontWeight: 'bold',
+    paddingBottom: 10,
   },
   subtitle: {
     fontSize: 20,
-    marginBottom: 10,
+    marginBottom: 4,
   },
   moretitle: {
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 4,
   },
   description: {
     marginBottom: 10,
