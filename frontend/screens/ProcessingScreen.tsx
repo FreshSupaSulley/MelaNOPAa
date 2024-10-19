@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Image, ImageBackground, Text, View } from "react-native";
 import { Button, Checkbox, IconButton, MD3Colors, useTheme } from "react-native-paper";
 import Svg, { Rect } from 'react-native-svg';
+import ImagePicker from 'react-native-image-crop-picker';
 
 export default function MapScreen({ navigation }) {
   const [dimensions, setDimensions] = useState({ width: 1, height: 1 });
@@ -16,7 +17,6 @@ export default function MapScreen({ navigation }) {
     const location = route.params?.['location'];
     const width = route.params?.['width'];
     const height = route.params?.['height'];
-    console.log("Gotss " + width + " " + height);
     // Image processing
     // Update photo
     setPhoto(route.params?.['uri']);
@@ -30,37 +30,8 @@ export default function MapScreen({ navigation }) {
   };
   // Analyze
   async function analyze() {
-    async function sendImage(photo) {
-      const blob = await (await fetch(photo)).blob();
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64data = reader.result; // This is the base64 string
-        fetch("https://fresh-corners-bake.loca.lt/freakyPics", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            image: base64data
-          })
-        }).then(async response => {
-          if (response.ok) {
-            const result = await response.json();
-            alert("done");
-            console.log(result);
-            navigation.navigate("Results", { "image": photo, "data": result });
-          } else {
-            alert("An error occured");
-            console.error(response.statusText);
-          }
-        }).catch(e => {
-          console.error("uh oh", e);
-        });
-      };
-      reader.readAsDataURL(blob);
-    }
-    // Call the function with the photo URL
-    sendImage(photo);
+    // Forward to loading screen
+    navigation.navigate("Loading", { "image": photo });
   }
   return (
     <View style={{ flex: 1 }}>

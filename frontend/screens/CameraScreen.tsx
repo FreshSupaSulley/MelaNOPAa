@@ -1,8 +1,9 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
+import * as ImageManipulator from 'expo-image-manipulator';
 import { default as React, useEffect, useRef, useState } from 'react';
-import { Animated, Button, Dimensions, Easing, Text, View } from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { Animated, Dimensions, Easing, Text, View } from 'react-native';
+import { Button, IconButton } from 'react-native-paper';
 import Svg, { Circle } from 'react-native-svg';
 
 const { width, height } = Dimensions.get('window');
@@ -63,9 +64,19 @@ export default function CameraScreen({ navigation }) {
       }).start();
     });
     if (cameraRef.current) {
-      console.log("picture");
-      cameraRef.current.takePictureAsync().then(picture => {
-        navigation.navigate("Processing", picture);
+      console.log("Got picture");
+      cameraRef.current.takePictureAsync().then(async picture => {
+        console.log(picture);
+        let factor = 2;
+        let newWidth = picture.width / factor;
+        let newHeight = picture.height / factor;
+        // Crop
+        const croppedImage = await ImageManipulator.manipulateAsync(picture.uri,
+          [{ crop: { originX: newWidth / factor, originY: newHeight / factor + newHeight / 3, width: newWidth, height: newHeight - (newHeight / 3) * 2 } }],
+          { format: ImageManipulator.SaveFormat.JPEG }
+        );
+        // Send to processing
+        navigation.navigate("Processing", croppedImage);
         setTimeout(() => {
           Animated.timing(fadeAnim, {
             toValue: 1, useNativeDriver: true,
@@ -80,7 +91,7 @@ export default function CameraScreen({ navigation }) {
   }
 
   return (
-    <CameraView ref={cameraRef} style={{ flex: 1 }} facing={facing}>
+    <CameraView autofocus='on' ref={cameraRef} style={{ flex: 1 }} facing={facing}>
       {/* Centered text */}
       <Animated.View style={{ position: "absolute", flex: 1, opacity: fadeAnim, top: 0, left: 0, right: 0 }}>
         <View style={{ top: 10, left: 0, right: 0 }}>

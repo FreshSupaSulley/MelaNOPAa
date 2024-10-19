@@ -11,6 +11,7 @@
   "dependencies": {
     "@expo/metro-runtime": "~3.2.1",
     "@firebase/firestore": "^4.6.4",
+    "@react-native-async-storage/async-storage": "^1.24.0",
     "@react-navigation/bottom-tabs": "^6.6.0",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.10.1",
@@ -32,6 +33,7 @@
     "react-native-camera": "^4.2.1",
     "react-native-canvas": "^0.1.40",
     "react-native-collapsible": "^1.6.2",
+    "react-native-image-crop-picker": "^0.41.4",
     "react-native-maps": "1.14.0",
     "react-native-paper": "^5.12.3",
     "react-native-pytorch-core": "^0.2.4",
