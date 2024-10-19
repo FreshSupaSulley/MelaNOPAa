@@ -4,9 +4,11 @@ import numpy as np
 import skin_cancer_detection as SCD
 import base64
 import io
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "downloads/"
+cors = CORS(app)
 
 @app.route('/freakyPics', methods=['POST'])
 def home():

@@ -18,7 +18,7 @@ export default function MapScreen({ navigation }) {
     const reader = new FileReader();
     reader.onloadend = async () => {
       const base64data = reader.result;
-      fetch("https://fresh-corners-bake.loca.lt/freakyPics", {
+      fetch("https://soft-women-draw.loca.lt/freakyPics", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,8 +35,10 @@ export default function MapScreen({ navigation }) {
           navigation.navigate("Results", { "image": image, "data": result });
         } else if(response.status == 502) {
           callAPI(image);
+        } else {
+          navigation.goBack();
+          throw response;
         }
-        throw response;
       }).catch(e => {
         console.log("Failed");
         console.log(e);

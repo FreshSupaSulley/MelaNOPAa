@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, ScrollView, View } from "react-native";
 import { Banner, Button, Card, Text } from "react-native-paper";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function MapScreen({ navigation }) {
   return (
