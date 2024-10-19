@@ -54,11 +54,10 @@ function Navigation() {
     <NavigationContainer theme={theme} ref={navigationRef}>
       {/* Configure global screen options */}
       <Stack.Navigator screenOptions={{ gestureEnabled: false, headerShown: false, headerBackTitle: "Back" }}>
-        {/* Content */}
-        <Stack.Screen name="Main" component={Tabs} options={{ animation: 'fade' }} />
         {/* Tutorial */}
         <Stack.Screen name="Tutorial" component={SplashScreen} options={{ animation: 'fade' }} />
-        
+        {/* Content */}
+        <Stack.Screen name="Main" component={Tabs} options={{ animation: 'fade' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

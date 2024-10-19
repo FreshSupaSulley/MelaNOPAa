@@ -1,44 +1,31 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, Dimensions, Text, TouchableOpacity, View } from 'react-native';
+import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
+import React, { useRef, useState } from 'react';
+import { Button, Dimensions, Text, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
-import { CameraType, RNCamera } from 'react-native-camera';
-import { Camera } from 'react-native-vision-camera'
 
 const { width, height } = Dimensions.get('window');
 
 export default function CameraScreen({ navigation }) {
   const [dimensions, setDimensions] = useState({ width: 1, height: 1 });
   const [facing, setFacing] = useState<CameraType>('back');
+  const [permission, requestPermission] = useCameraPermissions();
   const rectRef = useRef<Rect>(null);
-  const cameraRef = useRef(null);
-  const [hasPermission, setHasPermission] = useState(false);
-  const devices = useCameraDevices('wide-angle-camera');
-  // Permission
-  useEffect(() => {
-    Camera.requestCameraPermission().then((p) =>
-      setHasPermission(p === 'granted')
-    )
-  }, []);
-  // Get image
-  async function captureImage() {
-    if (cameraRef.current) {
-      const options = { quality: 0.5, base64: true };
-      const data = cameraRef.current.takePictureAsync(options).then(e => {
-        console.log("hi");
-      }).catch(e => {
-        // We don't care
-      });
-    }
+  if (!permission) {
+    // Camera permissions are still loading.
+    return <View />;
   }
-  // Loop
-  useEffect(() => {
-    let intervalId;
-    if (cameraRef.current) {
-      intervalId = setInterval(captureImage, 3000);
-    }
-  });
+
+  if (!permission.granted) {
+    // Camera permissions are not granted yet.
+    return (
+      <View style={{ alignItems: "center", alignContent: "center", flex: 1 }}>
+        <Text>Enable camera permission to scan.</Text>
+        <Button style={{ margin: 20 }} onPress={requestPermission} icon="camera" mode="contained">Enable Camera</Button>
+      </View>
+    );
+  }
 
   function toggleCameraFacing() {
     setFacing(current => (current === 'back' ? 'front' : 'back'));
@@ -52,7 +39,7 @@ export default function CameraScreen({ navigation }) {
   };
 
   return (
-    <Camera ref={cameraRef} isActive={true} style={{ flex: 1 }} device={devices.front} onLayout={(e) => setDimensions({ width: e.nativeEvent.layout.width, height: e.nativeEvent.layout.height })}>
+    <CameraView style={{ flex: 1 }} facing={facing} onLayout={(e) => setDimensions({ width: e.nativeEvent.layout.width, height: e.nativeEvent.layout.height })}>
       {/* Canvas */}
       <Svg width="100%" height="100%" viewBox={`0 0 ${dimensions.width || 1} ${dimensions.height || 1}`}>
         <Rect ref={rectRef} x="0" y="0" width={dimensions.width} height={dimensions.height} stroke="red" strokeWidth="2" fill="transparent" />
@@ -66,6 +53,6 @@ export default function CameraScreen({ navigation }) {
           <IconButton style={{ position: "absolute", left: 150 }} mode="outlined" icon={() => <MaterialIcons name="loop" size={24} color="white" />} size={30} onPress={toggleCameraFacing} />
         </View>
       </View>
-    </Camera>
+    </CameraView>
   );
 }
