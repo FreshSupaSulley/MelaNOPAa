@@ -43,18 +43,6 @@ function Tabs({ navigation }) {
           ),
         }}
       />
-      {/* Result screen */}
-      <Tab.Screen
-        name="ResultsScreen"
-        component={ResultsScreen}
-        options={{
-          title: "Results",
-          headerShown: false,
-          tabBarIcon: ({ focused, color }) => (
-            <Ionicons name={focused ? "information-circle" : "information-circle-outline"} size={iconSize} color={color} />
-          ),
-        }}
-      />
     </Tab.Navigator>
   );
 }
@@ -73,7 +61,9 @@ function Navigation() {
         {/* Content */}
         <Stack.Screen name="Main" component={Tabs} options={{ animation: 'fade' }} />
         {/* Processing */}
-        <Stack.Screen name="Processing" component={ProcessingScreen} options={{ headerRight: (props) => <Button title="Scan" onPress={() => alert("hi")} />, headerShown: true, headerTitle: "Confirm Image", animation: 'fade_from_bottom' }} />
+        <Stack.Screen name="Processing" component={ProcessingScreen} options={{ headerShown: true, headerTitle: "Confirm Image", animation: 'fade_from_bottom' }} />
+        {/* Processing */}
+        <Stack.Screen name="Results" component={ResultsScreen} options={{ animation: 'fade' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
