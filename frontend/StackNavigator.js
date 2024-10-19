@@ -9,6 +9,7 @@ import CameraScreen from "./screens/CameraScreen";
 import InfoScreen from "./screens/InfoScreen";
 import SplashScreen from "./screens/SplashScreen";
 import ProcessingScreen from "./screens/ProcessingScreen";
+import ResultsScreen from "./screens/ResultsScreen";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
@@ -36,6 +37,18 @@ function Tabs({ navigation }) {
         component={InfoScreen}
         options={{
           title: "Map",
+          headerShown: false,
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons name={focused ? "information-circle" : "information-circle-outline"} size={iconSize} color={color} />
+          ),
+        }}
+      />
+      {/* Result screen */}
+      <Tab.Screen
+        name="ResultsScreen"
+        component={ResultsScreen}
+        options={{
+          title: "Results",
           headerShown: false,
           tabBarIcon: ({ focused, color }) => (
             <Ionicons name={focused ? "information-circle" : "information-circle-outline"} size={iconSize} color={color} />

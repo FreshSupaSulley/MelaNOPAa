@@ -1,10 +1,11 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useRoute } from '@react-navigation/native';
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
-import React, { useEffect, useRef, useState } from 'react';
+import { default as React, useEffect, useRef, useState } from 'react';
 import { Animated, Button, Dimensions, Easing, Text, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
-import Svg, { Circle, Rect } from 'react-native-svg';
+import Svg, { Circle } from 'react-native-svg';
+
+const { width, height } = Dimensions.get('window');
 
 export default function CameraScreen({ navigation }) {
   const [dimensions, setDimensions] = useState({ width: 1, height: 1 });
@@ -64,15 +65,13 @@ export default function CameraScreen({ navigation }) {
     if (cameraRef.current) {
       console.log("picture");
       cameraRef.current.takePictureAsync().then(picture => {
+        navigation.navigate("Processing", picture);
         setTimeout(() => {
-          navigation.navigate("Processing", picture);
-        }, 1000);
+          Animated.timing(fadeAnim, {
+            toValue: 1, useNativeDriver: true,
+          }).start();
+        }, 3000);
       });
-      setTimeout(() => {
-        Animated.timing(fadeAnim, {
-          toValue: 1, useNativeDriver: true,
-        }).start();
-      }, 3000);
     }
   }
 
