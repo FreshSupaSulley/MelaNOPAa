@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { Banner, Button, DataTable, Text, Card, IconButton } from "react-native-paper";
 import { StyleSheet, Image, Platform, SafeAreaView, View, ScrollView, TouchableOpacity } from "react-native";
 import MapView, { Marker } from "react-native-maps";
@@ -7,23 +7,59 @@ import { useRoute } from "@react-navigation/native";
 
 
 export default function ResultsScreen({ navigation }) {
-    const data = {aKAIC: 0, bCC: 0, bKLL: 0, dF: 0, mN: 0, pGAH: 0, mel: 0}
+
+  const route = useRoute();
+  const [photo, setPhoto] = useState(null);
+
+  useEffect(() => {
+    const data = route.params?.['data'];
+    const location = route.params?.['location'];
+    const width = route.params?.['width'];
+    const height = route.params?.['height'];
+    console.log("Gotss " + width + " " + height);
+    // Image processing
+    // Update photo
+    setPhoto(route.params?.['uri']);
+  }, [route.params?.['uri']]);
+
+
+
+    //DELETE LATER: const data = {aKAIC: 0, bCC: 0, bKLL: 0, dF: 0, mN: 0, pGAH: 0, mel: 0}
     const [isCollapsed, setIsCollapsed] = useState(true);
 
-    
+    /* Determine most likely type of condition */
+    let indexOfMax = data.indexOf(Math.max(...data))
+    let potentialType;
+    switch(indexOfMax){
+      case 0:
+        potentialType = "Actinic Keratoses and Intraepithelial Carcinomae (Cancerous)";
+      case 1:
+        potentialType = "Basal Cell Carcinoma (Cancerous";
+      case 2:
+        potentialType = "Benign Keratosis-like Lesions (Non-Cancerous)";
+      case 3:
+        potentialType = "Dermatofibroma (Non-Cancerous)";
+      case 4:
+        potentialType = "Melanocytic Nevi (Non-Cancerous)";
+      case 5:
+        potentialType = "Pyogenic Granulomas and Hemorrhage (Can lead to Cancer)";
+      case 6:
+        potentialType = "Melanoma (Cancerous)";
+    }
+        
     return (
      <View style = {styles.container}>
         <ScrollView showsVerticalScrollIndicator={false} style={{ padding: 10 }}>
             <Card elevation={5} style={styles.card}>
                 <Text style={styles.title}>
-                    Skin Cancer Risk: {(data.aKAIC + data.bCC + data.pGAH + data.mel).toFixed(2)}%
+                    Skin Cancer Risk: {((data[0] + data[1] + data[2] + data[3] + data[4] + data[5] + data[6])*100).toFixed(2)}%
                 </Text>
                 <Text style={styles.subtitle}>
-                    Potential Type: {Math.max(data.aKAIC, data.bCC, data.bKLL, data.dF, data.mN, data.pGAH, data.mel)}
+                    Potential Type: {potentialType}
                 </Text>
             </Card>
 
-            <Image source={{ uri: 'INSERT URL HERE' }}/>
+            <Image source={{ uri: photo }}/>
 
             <Card style={styles.card}>
             <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)}>
@@ -44,31 +80,31 @@ export default function ResultsScreen({ navigation }) {
                 <DataTable>
                     <DataTable.Row>
                         <DataTable.Cell style={{flex:4}}><Text>Actinic Keratosis Intraepithelial Carcinoma (Cancerous):</Text></DataTable.Cell>
-                        <DataTable.Cell>{(parseFloat(data.aKAIC.toFixed(2)) * 100).toFixed(2)}%</DataTable.Cell>
+                        <DataTable.Cell>{((data[0]*100).toFixed(2))}%</DataTable.Cell>
                     </DataTable.Row>
                     <DataTable.Row>
                         <DataTable.Cell style={{flex:4}}><Text>Basal Cell Carcinoma (Cancerous):</Text></DataTable.Cell>
-                        <DataTable.Cell>{(parseFloat(data.bCC.toFixed(2)) * 100).toFixed(2)}%</DataTable.Cell>
+                        <DataTable.Cell>{((data[1]*100).toFixed(2))}%</DataTable.Cell>
                     </DataTable.Row>
                     <DataTable.Row>
                         <DataTable.Cell style={{flex:4}}><Text>Benign Keratosis-Like Lesion (Non-Cancerous):</Text></DataTable.Cell>
-                        <DataTable.Cell>{(parseFloat(data.bKLL.toFixed(2)) * 100).toFixed(2)}%</DataTable.Cell>
+                        <DataTable.Cell>{((data.[2]*100).toFixed(2))}%</DataTable.Cell>
                     </DataTable.Row>
                     <DataTable.Row>
                         <DataTable.Cell style={{flex:4}}><Text>Dermatofibroma (Non-Cancerous):</Text></DataTable.Cell>
-                        <DataTable.Cell>{(parseFloat(data.dF.toFixed(2)) * 100).toFixed(2)}%</DataTable.Cell>
+                        <DataTable.Cell>{((data[3]*100).toFixed(2))}%</DataTable.Cell>
                     </DataTable.Row>
                     <DataTable.Row>
                         <DataTable.Cell style={{flex:4}}><Text>Melanocytic Nevi:</Text></DataTable.Cell>
-                        <DataTable.Cell>{(parseFloat(data.mN.toFixed(2)) * 100).toFixed(2)}%</DataTable.Cell>
+                        <DataTable.Cell>{((data[4]*100).toFixed(2))}%</DataTable.Cell>
                     </DataTable.Row>
                     <DataTable.Row>
                         <DataTable.Cell  style={{flex:4}}><Text>Pyogenic Granulomas and Hemorrhage (Can lead to Cancer):</Text></DataTable.Cell>
-                        <DataTable.Cell>{(parseFloat(data.pGAH.toFixed(2)) * 100).toFixed(2)}%</DataTable.Cell>
+                        <DataTable.Cell>{((data[5].pGAH*100).toFixed(2))}%</DataTable.Cell>
                     </DataTable.Row>
                     <DataTable.Row>
                         <DataTable.Cell style={{flex:4}}><Text>Melanoma (Cancerous):</Text></DataTable.Cell>
-                        <DataTable.Cell>{(parseFloat(data.mel.toFixed(2)) * 100).toFixed(2)}%</DataTable.Cell>
+                        <DataTable.Cell>{((data[6].mel*100).toFixed(2))}%</DataTable.Cell>
                     </DataTable.Row>
                 </DataTable>
             </Collapsible>
