@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from PIL import Image
 import numpy as np
 import skin_cancer_detection as SCD
+import base64
+import io
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "downloads/"
@@ -9,8 +11,14 @@ app.config["UPLOAD_FOLDER"] = "downloads/"
 @app.route('/freakyPics', methods=['POST'])
 def home():
     if(request.method == 'POST'):
-        file = request.files['file']
-        inputimg = Image.open(file)
+        data = request.get_json()
+        if 'image' not in data:
+            return jsonify({"error": "No image provided"}), 400
+        
+        image_data = data['image'].split(",")[1]
+        image_bytes = base64.b64decode(image_data)
+
+        inputimg = Image.open(io.BytesIO(image_bytes))
         inputimg = inputimg.resize((28, 28))
         img = np.array(inputimg).reshape(-1, 28, 28, 3)
         result = SCD.model.predict(img)
