@@ -12,13 +12,6 @@ MelaNOPAa is a cutting-edge React Native mobile application designed to detect s
 - **AI Integration**: Leverages Artificial Intelligence for enhanced diagnostic capabilities.
 - **Flask Backend**: Utilizes Flask to manage server-side logic and API endpoints.
 
-## Language Composition
-
-- **TypeScript**: 65.3%
-- **JavaScript**: 23.7%
-- **Python**: 10.4%
-- **HTML**: 0.6%
-
 ## Getting Started
 
 ### Prerequisites
