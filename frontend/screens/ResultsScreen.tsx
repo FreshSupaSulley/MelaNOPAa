@@ -1,14 +1,14 @@
+import React, { useState } from 'react';
 import { Banner, Button, Text } from "react-native-paper";
-import { StyleSheet, Image, Platform, SafeAreaView, View, ScrollView } from "react-native";
+import { StyleSheet, Image, Platform, SafeAreaView, View, ScrollView, TouchableOpacity } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import Collapsible from "react-collapsible";
+import Collapsible from "react-native-collapsible";
 import { useRoute } from "@react-navigation/native";
-import 
-
 
 
 export default function ResultsScreen({ navigation }) {
     const data = {aKAIC: 0, bCC: 0, bKLL: 0, dF: 0, mN: 0, pGAH: 0, mel: 0}
+    const [isCollapsed, setIsCollapsed] = useState(true);
 
     
     return (
@@ -25,38 +25,35 @@ export default function ResultsScreen({ navigation }) {
 
             <Image source={{ uri: 'INSERT URL HERE' }}/>
 
-            <Collapsible trigger='More Details'>
-                <table>
-                    <tr>
-                        <td> Actinic Keratoses and Intraepithelial Carinomae (Cancerous): </td>
-                        <td> {data.aKAIC}%</td>
-                    </tr>
-                    <tr>
-                        <td> Basel Cell Carcinoma (Cancerous): </td>
-                        <td> {data.bCC}%</td>
-                    </tr>
-                    <tr>
-                        <td> Benign Keratosis-like Lesions (Non-Cancerous): </td>
-                        <td> {data.bKLL}%</td>
-                    </tr>
-                    <tr>
-                        <td> Dermatofibroma (Non-Cancerous): </td>
-                        <td> {data.dF}%</td>
-                    </tr>
-                    <tr>
-                        <td> Melanocytic Nevi (Non-Cancerous): </td>
-                        <td> {data.mN}%</td>
-                    </tr>
-                    <tr>
-                        <td> Pyogenic Garnulomas and Hemorrhage (Can Lead to Cancer): </td>
-                        <td> {data.pGAH}%</td>
-                    </tr>
-                    <tr>
-                        <td> Melanoma (Cancerous): </td>
-                        <td> {data.mel}%</td>
-                    </tr>
-                </table>
-            </Collapsible>
+            <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)}>
+          <Text style={{ fontWeight: "bold" }}>
+            More Details
+          </Text>
+        </TouchableOpacity>
+
+        <Collapsible collapsed={isCollapsed}>
+          <Text>
+            Probability of Actinic Keratosis, Intraepithelial Carcinoma: {data.aKAIC}%
+          </Text>
+          <Text>
+            Probability of Basal Cell Carcinoma: {data.bCC}%
+          </Text>
+          <Text>
+            Probability of Benign Keratosis-Like Lesion: {data.bKLL}%
+          </Text>
+          <Text>
+            Probability of Dermatofibroma: {data.dF}%
+          </Text>
+          <Text>
+            Probability of Melanocytic Nevi: {data.mN}%
+          </Text>
+          <Text>
+            Probability of Pigmented Actinic Keratosis, Bowen's Disease: {data.pGAH}%
+          </Text>
+          <Text>
+            Probability of Melanoma: {data.mel}%
+          </Text>
+        </Collapsible>
 
         </ScrollView>
 
