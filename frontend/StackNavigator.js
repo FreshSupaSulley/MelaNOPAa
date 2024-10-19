@@ -1,13 +1,14 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Platform, Animated, TouchableOpacity, View } from "react-native";
-import { Button, IconButton, useTheme } from "react-native-paper";
+import { Button, Platform, Animated, TouchableOpacity, View } from "react-native";
+import { IconButton, useTheme } from "react-native-paper";
 
 // Screens
 import CameraScreen from "./screens/CameraScreen";
 import InfoScreen from "./screens/InfoScreen";
 import SplashScreen from "./screens/SplashScreen";
+import ProcessingScreen from "./screens/ProcessingScreen";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
@@ -58,6 +59,8 @@ function Navigation() {
         <Stack.Screen name="Tutorial" component={SplashScreen} options={{ animation: 'fade' }} />
         {/* Content */}
         <Stack.Screen name="Main" component={Tabs} options={{ animation: 'fade' }} />
+        {/* Processing */}
+        <Stack.Screen name="Processing" component={ProcessingScreen} options={{ headerRight: (props) => <Button title="Scan" onPress={() => alert("hi")} />, headerShown: true, headerTitle: "Confirm Image", animation: 'fade_from_bottom' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
