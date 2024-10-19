@@ -50,63 +50,52 @@ const diseases = [
 export default function MapScreen({ navigation }) {
   return (
     <ScrollView style={styles.container}>
+      <Banner
+        visible={true}
+        icon="information"
+      >
+        Disclaimer: The information provided here is intended for preliminary screening purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.
+      </Banner>
       {diseases.map((disease, index) => (
         <Card key={index} style={styles.card}>
-          <Card.Content>
-            <Banner
-              style={styles.banner}
-              visible
-            >
-              <Text variant="titleLarge" style={styles.title}>{disease.name}</Text>
-              <Text variant="bodyMedium" style={styles.type}>{disease.type}</Text>
-            </Banner>
-            <Text variant="bodyMedium" style={styles.description}>{disease.description}</Text>
-            <Text variant="titleLarge" style={styles.symptomsTitle}>Symptoms:</Text>
-            {disease.symptoms.map((symptom, idx) => (
-              <Text key={idx} variant="bodyMedium" style={styles.symptom}>{symptom}</Text>
-            ))}
-          </Card.Content>
-        </Card>
+        <Card.Content>
+          <Text style={styles.title}>{disease.name}</Text>
+          <Text style={styles.subtitle}>{`Type: ${disease.type}`}</Text>
+          <Text style={styles.description}>{disease.description}</Text>
+          <Text style={styles.symptomsTitle}>Symptoms:</Text>
+          {disease.symptoms.map((symptom, idx) => (
+            <Text key={idx} style={styles.symptom}>{`${idx + 1}. ${symptom}`}</Text>
+          ))}
+        </Card.Content>
+      </Card>
       ))}
-      <Button
-        style={{ margin: 20 }}
-        onPress={() => navigation.navigate("DiseaseInfo")}
-        mode="contained"
-      >
-        Learn More
-      </Button>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 10,
+    backgroundColor: '#f5f5f5',
   },
   card: {
-    marginBottom: 20,
-  },
-  banner: {
-    borderRadius: 10,
-    marginBottom: 10,
+    marginVertical: 10,
   },
   title: {
-    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: 'bold',
   },
-  type: {
-    fontStyle: "italic",
-  },
-  image: {
-    width: "100%",
-    height: 200,
-    resizeMode: "contain",
+  subtitle: {
+    fontSize: 16,
+    color: 'gray',
     marginBottom: 10,
   },
   description: {
     marginBottom: 10,
   },
   symptomsTitle: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 10,
   },
   symptom: {

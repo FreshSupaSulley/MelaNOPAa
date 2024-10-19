@@ -1,8 +1,8 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
 import React, { useRef, useState } from 'react';
-import { Button, Dimensions, Text, View } from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { Dimensions, Text, View } from 'react-native';
+import { Button, IconButton } from 'react-native-paper';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 
 const { width, height } = Dimensions.get('window');
