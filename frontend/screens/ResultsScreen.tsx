@@ -66,7 +66,7 @@ export default function ResultsScreen({ navigation }) {
           </Text>
         </Card>
         {/* yall figure this out fuck you */}
-        <Image width={'100%'} height={'100%'} source={{ uri: photo }} />
+        <Image width={100} height={100} source={{ uri: photo }} />
 
         <Card style={styles.card}>
           <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)}>

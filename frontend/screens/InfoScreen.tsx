@@ -57,7 +57,7 @@ export default function MapScreen({ navigation }) {
         Disclaimer: The information provided here is intended for preliminary screening purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.
       </Banner>
       {diseases.map((disease, index) => (
-        <Card key={index} style={styles.card}>
+        <Card key={index} style={styles.card} mode="outlined">
         <Card.Content>
           <Text style={styles.title}>{disease.name}</Text>
           <Text style={styles.subtitle}>{`Type: ${disease.type}`}</Text>
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'rgba(0, 0, 0, 0)',
   },
   card: {
     marginVertical: 10,
