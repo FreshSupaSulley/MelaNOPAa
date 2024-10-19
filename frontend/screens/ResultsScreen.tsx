@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Banner, Button, Text } from "react-native-paper";
+import { Banner, Button, DataTable, Text } from "react-native-paper";
 import { StyleSheet, Image, Platform, SafeAreaView, View, ScrollView, TouchableOpacity } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import Collapsible from "react-native-collapsible";
@@ -26,35 +26,43 @@ export default function ResultsScreen({ navigation }) {
             <Image source={{ uri: 'INSERT URL HERE' }}/>
 
             <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)}>
-          <Text style={{ fontWeight: "bold" }}>
-            More Details
-          </Text>
-        </TouchableOpacity>
+                <Text style={{ fontWeight: "bold" }}>
+                    More Details
+                </Text>
+            </TouchableOpacity>
 
-        <Collapsible collapsed={isCollapsed}>
-          <Text>
-            Probability of Actinic Keratosis, Intraepithelial Carcinoma: {data.aKAIC}%
-          </Text>
-          <Text>
-            Probability of Basal Cell Carcinoma: {data.bCC}%
-          </Text>
-          <Text>
-            Probability of Benign Keratosis-Like Lesion: {data.bKLL}%
-          </Text>
-          <Text>
-            Probability of Dermatofibroma: {data.dF}%
-          </Text>
-          <Text>
-            Probability of Melanocytic Nevi: {data.mN}%
-          </Text>
-          <Text>
-            Probability of Pigmented Actinic Keratosis, Bowen's Disease: {data.pGAH}%
-          </Text>
-          <Text>
-            Probability of Melanoma: {data.mel}%
-          </Text>
-        </Collapsible>
-
+            <Collapsible collapsed={isCollapsed}>
+                <DataTable>
+                    <DataTable.Row>
+                        <DataTable.Cell> Probability of Actinic Keratosis Intraepithelial Carcinoma (Cancerous):</DataTable.Cell>
+                        <DataTable.Cell> {data.aKAIC.toFixed(2)}%</DataTable.Cell>
+                    </DataTable.Row>
+                    <DataTable.Row>
+                        <DataTable.Cell>Probability of Basal Cell Carcinoma (Cancerous):</DataTable.Cell>
+                        <DataTable.Cell>{data.bCC.toFixed(2)}%</DataTable.Cell>
+                    </DataTable.Row>
+                    <DataTable.Row>
+                        <DataTable.Cell>Probability of Benign Keratosis-Like Lesion (Non-Cancerous):</DataTable.Cell>
+                        <DataTable.Cell>{data.bKLL.toFixed(2)}%</DataTable.Cell>
+                    </DataTable.Row>
+                    <DataTable.Row>
+                        <DataTable.Cell>Probability of Dermatofibroma (Non-Cancerous):</DataTable.Cell>
+                        <DataTable.Cell>{data.dF.toFixed(2)}%</DataTable.Cell>
+                    </DataTable.Row>
+                    <DataTable.Row>
+                        <DataTable.Cell>Probability of Melanocytic Nevi:</DataTable.Cell>
+                        <DataTable.Cell>{data.mN.toFixed(2)}</DataTable.Cell>
+                    </DataTable.Row>
+                    <DataTable.Row>
+                        <DataTable.Cell>Probability of Pyogenic Granulomas and Hemorrhage (Can lead to Cancer):</DataTable.Cell>
+                        <DataTable.Cell>{data.pGAH.toFixed(2)}.</DataTable.Cell>
+                    </DataTable.Row>
+                    <DataTable.Row>
+                        <DataTable.Cell>Probability of Melanoma (Cancerous):</DataTable.Cell>
+                        <DataTable.Cell>{data.mel.toFixed(2)}</DataTable.Cell>
+                    </DataTable.Row>
+                </DataTable>
+            </Collapsible>
         </ScrollView>
 
        
