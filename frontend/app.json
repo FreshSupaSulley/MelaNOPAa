@@ -12,19 +12,34 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera"
+      },
+      "bundleIdentifier": "com.anonymous.MelaNOPAa"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
+      "package": "com.anonymous.MelaNOPAa"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "react-native-pytorch-core"
+      "react-native-pytorch-core",
+      "react-native-vision-camera",
+      [
+        "react-native-vision-camera",
+        {
+          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera."
+        }
+      ]
     ]
   }
 }

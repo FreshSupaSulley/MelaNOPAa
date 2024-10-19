@@ -1,7 +1,7 @@
 import React from "react";
-import { Appearance, SafeAreaView, View } from "react-native";
+import { Appearance, SafeAreaView, StatusBar, View } from "react-native";
 import { PaperProvider } from "react-native-paper";
-import Navigation from "./components/StackNavigator";
+import Navigation from "./StackNavigator";
 import * as Theme from "./themes";
 
 // App entry point
@@ -13,6 +13,7 @@ export default function App() {
   let theme = colorScheme == "light" ? Theme.lightTheme : Theme.darkTheme
   return (
     <PaperProvider theme={theme}>
+      <StatusBar />
       <View style={{ backgroundColor: theme.colors.background, flex: 1 }}>
         <SafeAreaView style={{ flex: 1 }}>
           <Navigation />
