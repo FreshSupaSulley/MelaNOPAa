@@ -5,25 +5,12 @@ import { Platform, Animated, TouchableOpacity, View } from "react-native";
 import { Button, IconButton, useTheme } from "react-native-paper";
 
 // Screens
-import CameraScreen from "../screens/CameraScreen";
-import MapScreen from "../screens/MapScreen";
-import SplashScreen from "../screens/SplashScreen";
-
-import ScalablePress from "./ScalablePress";
+import CameraScreen from "./screens/CameraScreen";
+import InfoScreen from "./screens/InfoScreen";
+import SplashScreen from "./screens/SplashScreen";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
-
-// Custom tab button so we can add fancy click effects
-const TabButton = (props) => {
-  const { children, onPress } = props;
-  return (
-    <ScalablePress onPress={onPress}>
-      {/* Add icon back */}
-      {children}
-    </ScalablePress>
-  )
-}
 
 // Navigation is passed in automagically
 function Tabs({ navigation }) {
@@ -31,7 +18,7 @@ function Tabs({ navigation }) {
   const iconSize = 30;
   const theme = useTheme();
   return (
-    <Tab.Navigator screenOptions={{ tabBarButton: (props) => <TabButton {...props} />, tabBarShowLabel: false, headerShown: false, tabBarActiveTintColor: theme.colors.primary, tabBarInactiveTintColor: theme.colors.onBackground }}>
+    <Tab.Navigator screenOptions={{ tabBarShowLabel: false, headerShown: false, tabBarActiveTintColor: theme.colors.primary, tabBarInactiveTintColor: theme.colors.onBackground }}>
       {/* Food screen */}
       <Tab.Screen
         name="CameraScreen"
@@ -44,8 +31,8 @@ function Tabs({ navigation }) {
       />
       {/* Map screen */}
       <Tab.Screen
-        name="MapScreen"
-        component={MapScreen}
+        name="InfoScreen"
+        component={InfoScreen}
         options={{
           title: "Map",
           headerShown: false,
@@ -62,14 +49,16 @@ const Stack = createNativeStackNavigator();
 
 function Navigation() {
   const navigationRef = useRef(null);
+  const theme = useTheme();
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer theme={theme} ref={navigationRef}>
       {/* Configure global screen options */}
       <Stack.Navigator screenOptions={{ gestureEnabled: false, headerShown: false, headerBackTitle: "Back" }}>
-        {/* Tutorial */}
-        <Stack.Screen name="Tutorial" component={SplashScreen} options={{ animation: 'fade' }} />
         {/* Content */}
         <Stack.Screen name="Main" component={Tabs} options={{ animation: 'fade' }} />
+        {/* Tutorial */}
+        <Stack.Screen name="Tutorial" component={SplashScreen} options={{ animation: 'fade' }} />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
