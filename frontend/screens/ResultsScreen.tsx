@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, ImageBackground, Image, Modal, Pressable, SafeAreaView, ScrollView, SectionList, StyleSheet, TouchableOpacity, View } from "react-native";
 import Collapsible from "react-native-collapsible";
 import { Button, Card, DataTable, Icon, IconButton, RadioButton, Text, TextInput } from "react-native-paper";
+import map from "../typeDescriptions";
 // import { AsyncStorage } from '@react-native-async-storage/async-storage';
 
 export default function ResultsScreen({ navigation }) {
@@ -12,7 +13,7 @@ export default function ResultsScreen({ navigation }) {
   const [cancerData, setCancerData] = useState([0]);
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [risk, setRisk] = useState("");
-  const [potentialType, setPotentialType] = useState("");
+  const [potentialType, setPotentialType] = useState({ name: "", description: "", article: "" });
   const [riskColor, setRiskColor] = useState("white");
   const [modalVisible, setModalVisible] = useState(false);
   const [historyText, setHistoryText] = useState("");
@@ -46,7 +47,7 @@ export default function ResultsScreen({ navigation }) {
   }
 
   async function saveModal() {
-    // Save
+    // Save new entry
     await AsyncStorage.setItem(
       'data',
       JSON.stringify([...historyData,
@@ -54,7 +55,7 @@ export default function ResultsScreen({ navigation }) {
         title: historyText,
         data: [{
           image: photo,
-          date: "today",
+          date: new Date().toLocaleDateString(),
           index: cancerData.indexOf(Math.max(...cancerData)),
           percent: risk
         }]
@@ -65,22 +66,17 @@ export default function ResultsScreen({ navigation }) {
     navigation.navigate("CameraScreen");
   }
 
-  async function saveOption(index) {
-    alert(index);
-    if(true) return;
+  async function saveOption(section) {
+    // Put into another entry
+    section.data.push({
+      image: photo,
+      date: new Date().toLocaleDateString(),
+      index: cancerData.indexOf(Math.max(...cancerData)),
+      percent: risk
+    });
     await AsyncStorage.setItem(
       'data',
-      JSON.stringify([...historyData,
-      {
-        title: historyText,
-        data: [{
-          image: photo,
-          date: "today",
-          index: cancerData.indexOf(Math.max(...cancerData)),
-          percent: risk
-        }]
-      }
-      ]),
+      JSON.stringify(historyData),
     );
     setModalVisible(false);
     navigation.navigate("CameraScreen");
@@ -90,53 +86,37 @@ export default function ResultsScreen({ navigation }) {
     /* Determine most likely type of condition */
     let indexOfMax = cancerData.indexOf(Math.max(...cancerData))
     let potentialType;
-    switch (indexOfMax) {
-      case 0:
-        setPotentialType("Actinic Keratoses and Intraepithelial Carcinomae (Cancerous)");
-        break;
-      case 1:
-        setPotentialType("Basal Cell Carcinoma (Cancerous");
-        break;
-      case 2:
-        setPotentialType("Benign Keratosis-like Lesions (Non-Cancerous)");
-        break;
-      case 3:
-        setPotentialType("Dermatofibroma (Non-Cancerous)");
-        break;
-      case 4:
-        setPotentialType("Melanocytic Nevi (Non-Cancerous)");
-        break;
-      case 5:
-        setPotentialType("Pyogenic Granulomas and Hemorrhage (Can lead to Cancer)");
-        break;
-      case 6:
-        setPotentialType("Melanoma (Cancerous)");
-        break;
-    }
+    setPotentialType({ name: map[indexOfMax].title, description: map[indexOfMax].description, article: map[indexOfMax].article });
+    // switch (indexOfMax) {
+    //   case 0:
+    //     setPotentialType({name: "Actinic Keratoses and Intraepithelial Carcinomae (Cancerous)", description: descriptions[0], article: articles[0]});
+    //     break;
+    //   case 1:
+    //     setPotentialType({name: "Basal Cell Carcinoma (Cancerous)", description: descriptions[1], article: articles[1]});
+    //     break;
+    //   case 2:
+    //     setPotentialType({name: "Benign Keratosis-like Lesions (Non-Cancerous)", description: descriptions[2], article: articles[2]});
+    //     break;
+    //   case 3:
+    //     setPotentialType({name: "Dermatofibroma (Non-Cancerous)", description: descriptions[3], article: articles[3]});
+    //     break;
+    //   case 4:
+    //     setPotentialType({name: "Melanocytic Nevi (Non-Cancerous)", description: descriptions[4], article: articles[4]});
+    //     break;
+    //   case 5:
+    //     setPotentialType({name: "Pyogenic Granulomas and Hemorrhage (Non-Cancerous)", description: descriptions[5], article: articles[5]});
+    //     break;
+    //   case 6:
+    //     setPotentialType({name: "Melanoma (Cancerous)", description: descriptions[6], article: articles[6]});
+    //     break;
+    // }
 
-    let riskCalc = ((cancerData[0] + cancerData[1] + cancerData[5] + cancerData[6]) * 100).toFixed(2);
+    let riskCalc = ((cancerData[0] + cancerData[1] + cancerData[6]) * 100).toFixed(2);
 
-    setRisk(((cancerData[0] + cancerData[1] + cancerData[5] + cancerData[6]) * 100).toFixed(2));
+    setRisk(riskCalc);
 
     findColor(riskCalc);
   };
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('data');
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {
-      // error reading value
-    }
-  };
-    
-  const storeData = async (value) => {
-    try {
-      await AsyncStorage.setItem('data', value)
-    } catch (e) {
-        
-    }
-  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -148,11 +128,25 @@ export default function ResultsScreen({ navigation }) {
                 Skin Cancer Risk:<Text style={{ fontSize: 23, fontWeight: 'bold', paddingBottom: 10, color: riskColor }}> {risk}%.</Text>
               </Text>
               <Text variant="titleSmall">
-                {potentialType}
+                Most likely: {potentialType.name}
               </Text>
             </View>
           </ImageBackground>
         </View>
+
+        <Card style={styles.card}>
+          <Text style={styles.description}>
+            {potentialType.description}
+          </Text>
+          <Text style={{ fontSize: 10 }}>
+            Click here for an article with reference images and more detailed information.
+          </Text>
+          <Icon
+            source={'link'}
+            color='black'
+            size={24}
+          />
+        </Card>
 
         <Card style={styles.card}>
           <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)}>
@@ -192,7 +186,7 @@ export default function ResultsScreen({ navigation }) {
                 <DataTable.Cell>{((cancerData[4] * 100).toFixed(2))}%</DataTable.Cell>
               </DataTable.Row>
               <DataTable.Row>
-                <DataTable.Cell style={{ flex: 4 }}><Text>Pyogenic Granulomas and Hemorrhage (Can lead to Cancer):</Text></DataTable.Cell>
+                <DataTable.Cell style={{ flex: 4 }}><Text>Pyogenic Granulomas and Hemorrhage (Non-Cancerous):</Text></DataTable.Cell>
                 <DataTable.Cell>{((cancerData[5] * 100).toFixed(2))}%</DataTable.Cell>
               </DataTable.Row>
               <DataTable.Row>
@@ -213,43 +207,49 @@ export default function ResultsScreen({ navigation }) {
             <Button textColor='white' style={{ width: 100, margin: 10, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} mode="contained" onPress={() => setModalVisible(false)}>Cancel</Button>
             <View style={{ padding: 10, paddingTop: 50, gap: 10 }}>
               <Text variant="titleLarge" style={{ fontWeight: "bold", color: "black", textAlign: "center" }}>Save the mole for tracking.</Text>
-              <Text variant="bodyMedium" style={{ color: "black", textAlign: "center" }}>All information remains local to your phone.</Text>
-              <Card style={[styles.card, { margin: 0, padding: 20, paddingTop: 6 }]}>
+              <Text variant="bodyMedium" style={{ color: "black", textAlign: "center" }}>All information remains secure on your phone.</Text>
+              <Card style={[styles.card, { margin: 0, paddingTop: 6 }]}>
                 {/* Hide if data is not here */}
                 {historyData.length > 0 &&
                   <View>
-                    <Text variant="bodyLarge" style={{ textAlign: "center", margin: 10 }}>Add to existing mole</Text>
+                    <Text variant="bodyLarge" style={{ fontWeight: "bold", textAlign: "center", margin: 10 }}>Add to existing entry</Text>
                     {/* Inputs */}
                     <SectionList
                       showsVerticalScrollIndicator={false}
-                      style={{ maxHeight: 200, marginBottom: 10, padding: 20, borderRadius: 10, backgroundColor: "black" }}
+                      style={{ maxHeight: 200, marginBottom: 10, borderRadius: 10, borderColor: "grey", borderWidth: 0.5 }}
                       sections={historyData}
-                      renderItem={({ item, index }) => {
+                      renderSectionHeader={({ section }) => {
                         return (
-                          <View>
-                            <View style={{ flexDirection: "row", flex: 1, alignSelf: "center", alignItems: 'center', gap: 30 }}>
-                              <Image style={{ height: 100, width: undefined, aspectRatio: 1 }} resizeMode="cover" source={{ uri: item.image }} />
-                              {/* Vertical */}
-                              <View style={{ gap: 4 }}>
-                                <Text style={{ fontWeight: "bold" }} variant="titleLarge">{historyData[index].title}</Text>
-                                <Text>{item.date}</Text>
-                                <Text>{item.index}</Text>
-                                <Text><Text style={{ fontWeight: "bold" }}>{item.percent}%</Text> confidence</Text>
-                              </View>
-                            </View>
-                            {/* Select button */}
-                            <Button textColor="white" style={{ margin: 8 }} mode="outlined" onPress={() => saveOption(index)}>Select {JSON.stringify(item.index)}</Button>
+                          // Renders each album
+                          <View style={{ alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, flexDirection: "row", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: 10 }}>
+                            <Text variant="titleLarge"><Text style={{ fontWeight: "bold" }}>{section.title}</Text>, {section.data.length} entr{section.data.length === 1 ? "y" : "ies"}</Text>
+                            <Button textColor="white" style={{ marginVertical: 6 }} mode="outlined" onPress={() => saveOption(section)}>Select</Button>
                           </View>
                         )
-                      }}>
+                      }}
+                      renderItem={({ item, index }) => {
+                        return (
+                          // Renders each image in data
+                          <View style={{ margin: 10, flexDirection: "row", alignItems: 'center', gap: 30 }}>
+                            <Image style={{ borderRadius: 10, height: 100, width: undefined, aspectRatio: 1 }} resizeMode="cover" source={{ uri: item.image }} />
+                            {/* Vertical */}
+                            <View style={{ gap: 10, flexShrink: 1 }}>
+                              <Text style={{ fontWeight: "bold" }}>{map[item.index].title}</Text>
+                              <Text><Text style={{ fontWeight: "bold" }}>{item.percent}%</Text> confidence</Text>
+                              <Text>{item.date}</Text>
+                            </View>
+                          </View>
+                        )
+                      }}
+                    >
                     </SectionList>
                   </View>
                 }
                 {/* Custom text */}
-                <Text variant="bodyLarge" style={{ textAlign: "center", margin: 10 }}>Create entry</Text>
+                <Text variant="bodyLarge" style={{ fontWeight: "bold", textAlign: "center", margin: 10 }}>Create entry</Text>
                 <TextInput value={historyText} onChangeText={text => setHistoryText(text)} placeholder="Mole Data" />
+                <Button disabled={historyText.length === 0} icon={"history"} style={{ borderRadius: 10, margin: 10 }} mode="contained" onPress={() => saveModal()}>Save</Button>
               </Card>
-              <Button icon={"history"} style={{ margin: 10 }} mode="contained" onPress={() => saveModal()}>Save</Button>
             </View>
           </SafeAreaView>
         </Modal>

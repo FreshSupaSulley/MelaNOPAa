@@ -6,7 +6,7 @@ const diseases = [
   {
     name: "Actinic Keratoses and Intraepithelial Carcinomae",
     type: "Cancer",
-    description: "Actinic keratoses are rough, scaly patches on the skin caused by years of sun exposure. They can sometimes progress to squamous cell carcinoma.",
+    description: "Actinic keratoses are rough, scaly patches on the skin caused by years of sun exposure. They can progress into Intraepidermal Carcinoma",
     symptoms: ["Rough, scaly patches", "Itching or burning", "Redness or inflammation"],
   },
   {
@@ -35,7 +35,7 @@ const diseases = [
   },
   {
     name: "Pyogenic Granulomas and Hemorrhage",
-    type: "Can lead to cancer",
+    type: "Non-Cancerous",
     description: "Pyogenic granulomas are small, reddish bumps on the skin that bleed easily. They are often caused by injury or irritation.",
     symptoms: ["Small, reddish bump", "Bleeding", "Rapid growth"],
   },
