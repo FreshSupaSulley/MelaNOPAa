@@ -2,7 +2,7 @@ import { useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from 'react';
 import { ImageBackground, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import Collapsible from "react-native-collapsible";
-import { Card, DataTable, IconButton, Text } from "react-native-paper";
+import { Card, DataTable, IconButton, Button, Text } from "react-native-paper";
 
 export default function ResultsScreen({ navigation }) {
   const route = useRoute();
@@ -27,11 +27,11 @@ export default function ResultsScreen({ navigation }) {
     let ratio = risk/100;
 
     // Calculating RGB values
-    let red = ((210-75) * ratio) + 20;
+    let red = ((210-75) * ratio) + 75;
     let green = (210-75) * (1 - ratio) + 75;
-
+    console.log(red + " " + green, ratio);
     // Set color state
-    setRiskColor('rgb(' + red + ', ' + green + ', 75)');
+    setRiskColor(`rgb(${red}, ${green}, 75)`);
 
   }
 
@@ -63,9 +63,11 @@ export default function ResultsScreen({ navigation }) {
         break;
     }
 
+    let riskCalc = ((cancerData[0] + cancerData[1] + cancerData[5] + cancerData[6]) * 100).toFixed(2);
+
     setRisk(((cancerData[0] + cancerData[1] + cancerData[5] + cancerData[6]) * 100).toFixed(2));
 
-    findColor(risk);
+    findColor(riskCalc);
   };
 
   return (
@@ -73,6 +75,7 @@ export default function ResultsScreen({ navigation }) {
       <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, padding: 0 }}>
         <View style={{ flex: 1}}>
           <ImageBackground style={{ flex: 1, width: '100%', height: 400}} resizeMode="cover" source={{ uri: photo }}>
+          <Button textColor='white' style={{ position: "absolute", backgroundColor: 'rgba(0, 0, 0, 0.5)'}} mode="contained" onPress={() => navigation.navigate("CameraScreen")}>Back</Button>
             <View style={{ position: "absolute", padding: 10, backgroundColor: 'rgba(0, 0, 0, 0.5)', width: '100%', flex: 1, bottom: 0 }}>
               <Text style={styles.title}>
                 Skin Cancer Risk:<Text style={{fontSize: 23, fontWeight: 'bold', paddingBottom: 10, color: riskColor}}> {risk}%.</Text>
