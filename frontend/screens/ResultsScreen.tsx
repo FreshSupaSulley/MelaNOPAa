@@ -12,6 +12,7 @@ export default function ResultsScreen({ navigation }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [risk, setRisk] = useState("");
   const [potentialType, setPotentialType] = useState("");
+  const [typeDescription, setTypeDescription] = useState("");
   const [riskColor, setRiskColor] = useState("white");
   const [modalVisible, setModalVisible] = useState(false);
   const [historyText, setHistoryText] = useState("");
@@ -89,9 +90,10 @@ export default function ResultsScreen({ navigation }) {
     switch (indexOfMax) {
       case 0:
         setPotentialType("Actinic Keratoses and Intraepithelial Carcinomae (Cancerous)");
+
         break;
       case 1:
-        setPotentialType("Basal Cell Carcinoma (Cancerous");
+        setPotentialType("Basal Cell Carcinoma (Cancerous)");
         break;
       case 2:
         setPotentialType("Benign Keratosis-like Lesions (Non-Cancerous)");
@@ -103,16 +105,16 @@ export default function ResultsScreen({ navigation }) {
         setPotentialType("Melanocytic Nevi (Non-Cancerous)");
         break;
       case 5:
-        setPotentialType("Pyogenic Granulomas and Hemorrhage (Can lead to Cancer)");
+        setPotentialType("Pyogenic Granulomas and Hemorrhage (Non-Cancerous)");
         break;
       case 6:
         setPotentialType("Melanoma (Cancerous)");
         break;
     }
 
-    let riskCalc = ((cancerData[0] + cancerData[1] + cancerData[5] + cancerData[6]) * 100).toFixed(2);
+    let riskCalc = ((cancerData[0] + cancerData[1] + cancerData[6]) * 100).toFixed(2);
 
-    setRisk(((cancerData[0] + cancerData[1] + cancerData[5] + cancerData[6]) * 100).toFixed(2));
+    setRisk(riskCalc);
 
     findColor(riskCalc);
   };
@@ -127,11 +129,15 @@ export default function ResultsScreen({ navigation }) {
                 Skin Cancer Risk:<Text style={{ fontSize: 23, fontWeight: 'bold', paddingBottom: 10, color: riskColor }}> {risk}%.</Text>
               </Text>
               <Text variant="titleSmall">
-                {potentialType}
+                Most likely: {potentialType}
               </Text>
             </View>
           </ImageBackground>
         </View>
+
+        <Card style={styles.card}>
+          
+        </Card>
 
         <Card style={styles.card}>
           <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)}>
@@ -171,7 +177,7 @@ export default function ResultsScreen({ navigation }) {
                 <DataTable.Cell>{((cancerData[4] * 100).toFixed(2))}%</DataTable.Cell>
               </DataTable.Row>
               <DataTable.Row>
-                <DataTable.Cell style={{ flex: 4 }}><Text>Pyogenic Granulomas and Hemorrhage (Can lead to Cancer):</Text></DataTable.Cell>
+                <DataTable.Cell style={{ flex: 4 }}><Text>Pyogenic Granulomas and Hemorrhage (Non-Cancerous):</Text></DataTable.Cell>
                 <DataTable.Cell>{((cancerData[5] * 100).toFixed(2))}%</DataTable.Cell>
               </DataTable.Row>
               <DataTable.Row>
