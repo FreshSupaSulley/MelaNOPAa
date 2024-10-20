@@ -1,29 +1,75 @@
-import React from "react";
-import { Image, ScrollView, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, ScrollView, View, SectionList } from "react-native";
 import { Banner, Button, Card, Text } from "react-native-paper";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import map from "../typeDescriptions";
 
 export default function MapScreen({ navigation }) {
+  const [histData, setHistData] = useState([]);
+  useEffect(() => {
+    updateHistoryData();
+  }, []);
+
+  function updateHistoryData() {
+    AsyncStorage.getItem("data").then((data) => {
+      setHistData(JSON.parse(data));
+      console.log(histData);
+      console.log(histData.length);
+    });
+  }
+
   return (
     <View style={{ flex: 1, padding: 0, margin: 0 }}>
-      <Banner elevation={5} style={{ borderRadius: 10, margin: 8, marginTop: 0, marginBottom: 0 }} visible><Text variant="titleLarge" style={{ fontWeight: "bold" }}>History</Text></Banner>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ padding: 10 }}>
-        <Image style={{ width: '100%', height: '80%' }} resizeMode="contain" source={require('../assets/history.png')} />
-        {/* Look out for */}
-        <View style={{ margin: 5, flex: 1, justifyContent: "space-between" }}>
-          <Text variant="titleLarge" style={{ marginBottom: 10 }}>Our AI models can diagnose multiple types of skin cancer, including:</Text>
-          <Card mode="outlined">
-            <Card.Content>
-              <Text variant="bodyMedium">Actinic keratosis, basal cell carcinoma, dermatofibroma, melanoma, nevus, pigmented benign keratosis, seborrheic keratosis, squamous cell carcinoma, and vascular lesion.</Text>
-            </Card.Content>
-          </Card>
-          <Text style={{ marginTop: 10 }} variant="bodyMedium"><Text style={{ fontWeight: "bold" }}>Note</Text>: Any malignant diagnoses should be followed up with a medical professional.</Text>
-        </View>
-      </ScrollView>
+      <Banner
+        elevation={5}
+        style={{ borderRadius: 10, margin: 8, marginTop: 0, marginBottom: 0 }}
+        visible
+      >
+        <Text variant="titleLarge" style={{ fontWeight: "bold" }}>
+          History
+        </Text>
+      </Banner>
+      <View style={{ margin: 5, flex: 1, justifyContent: "space-between" }}>
+      <SectionList
+        showsVerticalScrollIndicator={false}
+        style={{ maxHeight: 200, marginBottom: 10, borderRadius: 10, borderColor: "grey", borderWidth: 0.5 }}
+        sections={histData}
+        renderSectionHeader={({ section }) => {
+          return (
+            // Renders each album
+            <View style={{ alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, flexDirection: "row", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: 10 }}>
+              <Text variant="titleLarge"><Text style={{ fontWeight: "bold" }}>{section.title}</Text>, {section.data.length} entr{section.data.length === 1 ? "y" : "ies"}</Text>
+            </View>
+          )
+        }}
+        renderItem={({ item, index }) => {
+          return (
+            // Renders each image in data
+            <View style={{ margin: 10, flexDirection: "row", alignItems: 'center', gap: 30 }}>
+              <Image style={{ borderRadius: 10, height: 100, width: undefined, aspectRatio: 1 }} resizeMode="cover" source={{ uri: item.image }} />
+              {/* Vertical */}
+              <View style={{ gap: 10, flexShrink: 1 }}>
+                <Text style={{ fontWeight: "bold" }}>{map[item.index].title}</Text>
+                <Text><Text style={{ fontWeight: "bold" }}>{item.percent}%</Text> confidence</Text>
+                <Text>{item.date}</Text>
+              </View>
+            </View>
+          )
+        }}
+      >
+      </SectionList>
+      </View>
       {/* Go button */}
-      <Button style={{ margin: 20 }} onPress={() => {
-        navigation.navigate("Main");
-      }} icon="camera" mode="contained">Scan Moles</Button>
+      <Button
+        style={{ margin: 20 }}
+        onPress={() => {
+          navigation.navigate("Main");
+        }}
+        icon="camera"
+        mode="contained"
+      >
+        Scan Moles
+      </Button>
     </View>
   );
 }

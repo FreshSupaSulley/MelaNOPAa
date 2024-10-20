@@ -31,7 +31,6 @@ export default function ResultsScreen({ navigation }) {
   }, [route.params]);
 
   function updateHistoryData() {
-    // Fetch data
     AsyncStorage.getItem("data").then((data) => {
       setHistoryData(data === null ? [] : JSON.parse(data));
     });
