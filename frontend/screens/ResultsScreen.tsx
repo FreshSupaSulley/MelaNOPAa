@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Alert, ImageBackground, Image, Modal, Pressable, SafeAreaView, ScrollView, SectionList, StyleSheet, TouchableOpacity, View } from "react-native";
 import Collapsible from "react-native-collapsible";
 import { Button, Card, DataTable, Icon, IconButton, RadioButton, Text, TextInput } from "react-native-paper";
-// import { AsyncStorage } from '@react-native-async-storage/async-storage';
 
 export default function ResultsScreen({ navigation }) {
   const route = useRoute();
@@ -32,6 +31,7 @@ export default function ResultsScreen({ navigation }) {
   function updateHistoryData() {
     // Fetch data
     AsyncStorage.getItem("data").then((data) => {
+      console.log(data);
       setHistoryData(data === null ? [] : JSON.parse(data));
     });
   }
@@ -47,7 +47,7 @@ export default function ResultsScreen({ navigation }) {
   }
 
   async function saveModal() {
-    // Save
+    // Save new entry
     await AsyncStorage.setItem(
       'data',
       JSON.stringify([...historyData,
@@ -55,7 +55,7 @@ export default function ResultsScreen({ navigation }) {
         title: historyText,
         data: [{
           image: photo,
-          date: "today",
+          date: new Date().toLocaleDateString(),
           index: cancerData.indexOf(Math.max(...cancerData)),
           percent: risk
         }]
@@ -66,22 +66,17 @@ export default function ResultsScreen({ navigation }) {
     navigation.navigate("CameraScreen");
   }
 
-  async function saveOption(index) {
-    alert(index);
-    if(true) return;
+  async function saveOption(section) {
+    // Put into another entry
+    section.data.push({
+      image: photo,
+      date: new Date().toLocaleDateString(),
+      index: cancerData.indexOf(Math.max(...cancerData)),
+      percent: risk
+    });
     await AsyncStorage.setItem(
       'data',
-      JSON.stringify([...historyData,
-      {
-        title: historyText,
-        data: [{
-          image: photo,
-          date: "today",
-          index: cancerData.indexOf(Math.max(...cancerData)),
-          percent: risk
-        }]
-      }
-      ]),
+      JSON.stringify(historyData),
     );
     setModalVisible(false);
     navigation.navigate("CameraScreen");
@@ -121,23 +116,6 @@ export default function ResultsScreen({ navigation }) {
 
     findColor(riskCalc);
   };
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('data');
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {
-      // error reading value
-    }
-  };
-    
-  const storeData = async (value) => {
-    try {
-      await AsyncStorage.setItem('data', value)
-    } catch (e) {
-        
-    }
-  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -214,43 +192,51 @@ export default function ResultsScreen({ navigation }) {
             <Button textColor='white' style={{ width: 100, margin: 10, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} mode="contained" onPress={() => setModalVisible(false)}>Cancel</Button>
             <View style={{ padding: 10, paddingTop: 50, gap: 10 }}>
               <Text variant="titleLarge" style={{ fontWeight: "bold", color: "black", textAlign: "center" }}>Save the mole for tracking.</Text>
-              <Text variant="bodyMedium" style={{ color: "black", textAlign: "center" }}>All information remains local to your phone.</Text>
-              <Card style={[styles.card, { margin: 0, padding: 20, paddingTop: 6 }]}>
+              <Text variant="bodyMedium" style={{ color: "black", textAlign: "center" }}>All information remains secure on your phone.</Text>
+              <Card style={[styles.card, { margin: 0, paddingTop: 6 }]}>
                 {/* Hide if data is not here */}
                 {historyData.length > 0 &&
                   <View>
-                    <Text variant="bodyLarge" style={{ textAlign: "center", margin: 10 }}>Add to existing mole</Text>
+                    <Text variant="bodyLarge" style={{ fontWeight: "bold", textAlign: "center", margin: 10 }}>Add to existing mole</Text>
                     {/* Inputs */}
                     <SectionList
                       showsVerticalScrollIndicator={false}
-                      style={{ maxHeight: 200, marginBottom: 10, padding: 20, borderRadius: 10, backgroundColor: "black" }}
+                      style={{ maxHeight: 200, marginBottom: 10, borderRadius: 10, borderColor: "grey", borderWidth: 0.5 }}
                       sections={historyData}
+                      renderSectionHeader={({ section }) => {
+                        return (
+                          // Renders each album
+                          <View style={{ alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, flexDirection: "row", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: 10 }}>
+                            <Text variant="titleLarge"><Text style={{ fontWeight: "bold" }}>{section.title}</Text>, {section.data.length} entr{section.data.length === 1 ? "y" : "ies"}</Text>
+                            <Button textColor="white" style={{ marginVertical: 6 }} mode="outlined" onPress={() => saveOption(section)}>Select</Button>
+                          </View>
+                        )
+                      }}
                       renderItem={({ item, index }) => {
                         return (
-                          <View>
+                          // Renders each image in data
+                          <View style={{ margin: 10 }}>
                             <View style={{ flexDirection: "row", flex: 1, alignSelf: "center", alignItems: 'center', gap: 30 }}>
-                              <Image style={{ height: 100, width: undefined, aspectRatio: 1 }} resizeMode="cover" source={{ uri: item.image }} />
+                              <Image style={{ borderRadius: 10, height: 100, width: undefined, aspectRatio: 1 }} resizeMode="cover" source={{ uri: item.image }} />
                               {/* Vertical */}
                               <View style={{ gap: 4 }}>
-                                <Text style={{ fontWeight: "bold" }} variant="titleLarge">{historyData[index].title}</Text>
                                 <Text>{item.date}</Text>
                                 <Text>{item.index}</Text>
                                 <Text><Text style={{ fontWeight: "bold" }}>{item.percent}%</Text> confidence</Text>
                               </View>
                             </View>
-                            {/* Select button */}
-                            <Button textColor="white" style={{ margin: 8 }} mode="outlined" onPress={() => saveOption(index)}>Select {JSON.stringify(item.index)}</Button>
                           </View>
                         )
-                      }}>
+                      }}
+                    >
                     </SectionList>
                   </View>
                 }
                 {/* Custom text */}
-                <Text variant="bodyLarge" style={{ textAlign: "center", margin: 10 }}>Create entry</Text>
+                <Text variant="bodyLarge" style={{ fontWeight: "bold", textAlign: "center", margin: 10 }}>Create entry</Text>
                 <TextInput value={historyText} onChangeText={text => setHistoryText(text)} placeholder="Mole Data" />
+                <Button disabled={historyText.length === 0} icon={"history"} style={{ borderRadius: 10, margin: 10 }} mode="contained" onPress={() => saveModal()}>Save</Button>
               </Card>
-              <Button icon={"history"} style={{ margin: 10 }} mode="contained" onPress={() => saveModal()}>Save</Button>
             </View>
           </SafeAreaView>
         </Modal>

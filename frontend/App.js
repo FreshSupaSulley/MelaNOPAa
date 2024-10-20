@@ -13,7 +13,7 @@ export default function App() {
   // Define theme
   let theme = colorScheme == "light" ? Theme.lightTheme : Theme.darkTheme
   // Clear data
-  // AsyncStorage.clear();
+  AsyncStorage.clear();
   return (
     <PaperProvider theme={theme}>
       <StatusBar />
