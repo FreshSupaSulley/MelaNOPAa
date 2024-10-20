@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, ImageBackground, Image, Modal, Pressable, SafeAreaView, ScrollView, SectionList, StyleSheet, TouchableOpacity, View } from "react-native";
 import Collapsible from "react-native-collapsible";
 import { Button, Card, DataTable, Icon, IconButton, RadioButton, Text, TextInput } from "react-native-paper";
+import { descriptions, articles } from "../typeDescriptions";
 // import { AsyncStorage } from '@react-native-async-storage/async-storage';
 
 export default function ResultsScreen({ navigation }) {
@@ -12,8 +13,7 @@ export default function ResultsScreen({ navigation }) {
   const [cancerData, setCancerData] = useState([0]);
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [risk, setRisk] = useState("");
-  const [potentialType, setPotentialType] = useState("");
-  const [typeDescription, setTypeDescription] = useState("");
+  const [potentialType, setPotentialType] = useState({name: "", description: "", article: ""});
   const [riskColor, setRiskColor] = useState("white");
   const [modalVisible, setModalVisible] = useState(false);
   const [historyText, setHistoryText] = useState("");
@@ -94,26 +94,25 @@ export default function ResultsScreen({ navigation }) {
     let potentialType;
     switch (indexOfMax) {
       case 0:
-        setPotentialType("Actinic Keratoses and Intraepithelial Carcinomae (Cancerous)");
-
+        setPotentialType({name: "Actinic Keratoses and Intraepithelial Carcinomae (Cancerous)", description: descriptions[0], article: articles[0]});
         break;
       case 1:
-        setPotentialType("Basal Cell Carcinoma (Cancerous)");
+        setPotentialType({name: "Basal Cell Carcinoma (Cancerous)", description: descriptions[1], article: articles[1]});
         break;
       case 2:
-        setPotentialType("Benign Keratosis-like Lesions (Non-Cancerous)");
+        setPotentialType({name: "Benign Keratosis-like Lesions (Non-Cancerous)", description: descriptions[2], article: articles[2]});
         break;
       case 3:
-        setPotentialType("Dermatofibroma (Non-Cancerous)");
+        setPotentialType({name: "Dermatofibroma (Non-Cancerous)", description: descriptions[3], article: articles[3]});
         break;
       case 4:
-        setPotentialType("Melanocytic Nevi (Non-Cancerous)");
+        setPotentialType({name: "Melanocytic Nevi (Non-Cancerous)", description: descriptions[4], article: articles[4]});
         break;
       case 5:
-        setPotentialType("Pyogenic Granulomas and Hemorrhage (Non-Cancerous)");
+        setPotentialType({name: "Pyogenic Granulomas and Hemorrhage (Non-Cancerous)", description: descriptions[5], article: articles[5]});
         break;
       case 6:
-        setPotentialType("Melanoma (Cancerous)");
+        setPotentialType({name: "Melanoma (Cancerous)", description: descriptions[6], article: articles[6]});
         break;
     }
 
@@ -151,14 +150,24 @@ export default function ResultsScreen({ navigation }) {
                 Skin Cancer Risk:<Text style={{ fontSize: 23, fontWeight: 'bold', paddingBottom: 10, color: riskColor }}> {risk}%.</Text>
               </Text>
               <Text variant="titleSmall">
-                Most likely: {potentialType}
+                Most likely: {potentialType.name}
               </Text>
             </View>
           </ImageBackground>
         </View>
 
         <Card style={styles.card}>
-          
+          <Text style = {styles.description}>
+              {potentialType.description}
+          </Text>
+            <Text style = {{fontSize: 10}}>
+              Click here for an article with reference images and more detailed information.
+            </Text>
+            <Icon
+              source={'link'} 
+              color='black'
+              size={24}
+            />
         </Card>
 
         <Card style={styles.card}>
