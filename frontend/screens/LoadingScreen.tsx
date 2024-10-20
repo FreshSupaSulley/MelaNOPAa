@@ -18,7 +18,7 @@ export default function MapScreen({ navigation }) {
     const reader = new FileReader();
     reader.onloadend = async () => {
       const base64data = reader.result;
-      fetch("https://soft-women-draw.loca.lt/freakyPics", {
+      fetch("https://solid-eagles-read.loca.lt/freakyPics", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
