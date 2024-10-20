@@ -12,6 +12,7 @@ export default function MapScreen({ navigation }) {
   const [checked, setChecked] = useState(false);
   const rectRef = useRef<Rect>(null);
   const theme = useTheme();
+  const indentX = 10, indentY = 50;
   // Route doesn't become available until rendered apparently
   useEffect(() => {
     const location = route.params?.['location'];
@@ -37,7 +38,7 @@ export default function MapScreen({ navigation }) {
     <View style={{ flex: 1 }}>
       <ImageBackground source={{ uri: photo }} style={{ flex: 1 }} onLayout={(e) => setDimensions({ width: e.nativeEvent.layout.width, height: e.nativeEvent.layout.height })}>
         <Svg style={{ flex: 1 }} width="100%" height="100%" viewBox={`0 0 ${dimensions.width || 1} ${dimensions.height || 1}`}>
-          <Rect ref={rectRef} x="0" y="0" width={dimensions.width} height={dimensions.height} stroke="red" strokeWidth="2" fill="transparent" />
+          <Rect ref={rectRef} x={indentX} y={indentY} width={dimensions.width - indentX * 2} height={dimensions.height - indentY * 2} stroke="red" strokeWidth="2" fill="transparent" />
         </Svg>
       </ImageBackground>
       {/* Buttons */}

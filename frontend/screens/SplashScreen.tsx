@@ -56,7 +56,7 @@ export default function SplashScreen({ navigation }) {
                         <Image style={{ width: '100%', height: '100%' }} resizeMode="contain" source={require('../assets/step2.png')} />
                         {/* Look out for */}
                         <View style={{ margin: 10 }}>
-                            <Text variant="bodyMedium">We'll use our proprietary AI model trained on a dataset with thousands of images to give an accurate diagnosis. <Text variant="bodyMedium" style={{ fontWeight: "bold" }}>Your data is never stored, only processed by our models.</Text></Text>
+                            <Text variant="bodyMedium">We'll use our proprietary AI model trained on a Harvard University dataset with thousands of images to give as high of an accurate diagnosis as possible. <Text variant="bodyMedium" style={{ fontWeight: "bold" }}>Your data is never stored, only processed by our models.</Text></Text>
                         </View>
                         <View style={{ margin: 10 }}>
                             <Text variant="bodyMedium">Our model is capable of detecting benign and potentially malignant formations on the skin, in addition to classifying the type of skin cancer at a <Text style={{ fontWeight: "bold" }}>70% accuracy</Text>. Any malignant diagnoses should be followed up with a medical professional.</Text>

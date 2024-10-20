@@ -180,6 +180,7 @@ export default function ResultsScreen({ navigation }) {
         {/* Save modal */}
         <Modal
           animationType="slide"
+          transparent={false}
           visible={modalVisible}
           onShow={() => updateHistoryData()}
         >
@@ -202,7 +203,7 @@ export default function ResultsScreen({ navigation }) {
                         return (
                           // Renders each album
                           <View style={{ alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, flexDirection: "row", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: 10 }}>
-                            <Text variant="titleLarge"><Text style={{ fontWeight: "bold" }}>{section.title}</Text>, {section.data.length} entr{section.data.length === 1 ? "y" : "ies"}</Text>
+                            <Text style={{ flex: 1 }} variant="titleLarge"><Text style={{ fontWeight: "bold" }}>{section.title}</Text>, {section.data.length} entr{section.data.length === 1 ? "y" : "ies"}</Text>
                             <Button textColor="white" style={{ marginVertical: 6 }} mode="outlined" onPress={() => saveOption(section)}>Select</Button>
                           </View>
                         )

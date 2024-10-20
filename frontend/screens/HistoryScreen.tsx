@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Image, ScrollView, View, SectionList } from "react-native";
-import { Banner, Button, Card, Icon, Text } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRoute } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { Image, SectionList, View } from "react-native";
+import { ActivityIndicator, Banner, Button, Icon, Text } from "react-native-paper";
 import map from "../typeDescriptions";
-import { useFocusEffect, useRoute } from "@react-navigation/native";
 
 export default function HistoryScreen({ navigation }) {
   const [historyData, setHistoryData] = useState([]);
@@ -11,10 +11,7 @@ export default function HistoryScreen({ navigation }) {
 
   // On launch
   useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', () => {
-      updateHistoryData();
-    });
-    return unsubscribe;
+    updateHistoryData();
   }, [navigation]);
 
   function updateHistoryData() {
@@ -30,15 +27,18 @@ export default function HistoryScreen({ navigation }) {
         style={{ borderRadius: 10, margin: 8, marginTop: 0, marginBottom: 0 }}
         visible
       >
-        <Text variant="titleLarge" style={{ fontWeight: "bold" }}>
-          History
-        </Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignContent: "center", alignItems: "center", flex: 1, width: '100%' }}>
+          <Text variant="titleLarge" style={{ fontWeight: "bold" }}>
+            History
+          </Text>
+          <Button style={{ margin: 10 }} onPress={() => updateHistoryData()} icon="refresh" mode="contained">Refresh</Button>
+        </View>
       </Banner>
       {historyData.length === 0 ? (
         <View style={{ margin: 20, gap: 8 }}>
           <Text style={{ fontWeight: "bold" }} variant="titleLarge">No data.</Text>
           <Text>Head to the scan screen to add entries.</Text>
-          <Image style={{ width: '100%', height: 300 }} source={require('../assets/history.png')} />
+          <Image style={{ width: '100%', height: 300, alignContent: "center", alignItems: "center", justifyContent: "center" }} source={require('../assets/history.png')} />
         </View>
       ) : (
         <View style={{ margin: 5, flex: 1, justifyContent: "space-between" }}>
