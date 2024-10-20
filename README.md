@@ -30,6 +30,7 @@ MelaNOPAa is a cutting-edge React Native mobile application designed to detect s
 
 2. Install dependencies:
     ```bash
+    cd frontend
     npm install
     ```
 
