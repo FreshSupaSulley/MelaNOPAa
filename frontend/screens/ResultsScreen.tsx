@@ -134,11 +134,6 @@ export default function ResultsScreen({ navigation }) {
             </View>
           </ImageBackground>
         </View>
-
-        <Card style={styles.card}>
-          
-        </Card>
-
         <Card style={styles.card}>
           <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
