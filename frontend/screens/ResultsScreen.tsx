@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, ImageBackground, Image, Modal, Pressable, SafeAreaView, ScrollView, SectionList, StyleSheet, TouchableOpacity, View } from "react-native";
 import Collapsible from "react-native-collapsible";
 import { Button, Card, DataTable, Icon, IconButton, RadioButton, Text, TextInput } from "react-native-paper";
-import { descriptions, articles } from "../typeDescriptions";
+import map from "../typeDescriptions";
 // import { AsyncStorage } from '@react-native-async-storage/async-storage';
 
 export default function ResultsScreen({ navigation }) {
@@ -13,7 +13,7 @@ export default function ResultsScreen({ navigation }) {
   const [cancerData, setCancerData] = useState([0]);
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [risk, setRisk] = useState("");
-  const [potentialType, setPotentialType] = useState({name: "", description: "", article: ""});
+  const [potentialType, setPotentialType] = useState({ name: "", description: "", article: "" });
   const [riskColor, setRiskColor] = useState("white");
   const [modalVisible, setModalVisible] = useState(false);
   const [historyText, setHistoryText] = useState("");
@@ -33,7 +33,6 @@ export default function ResultsScreen({ navigation }) {
   function updateHistoryData() {
     // Fetch data
     AsyncStorage.getItem("data").then((data) => {
-      console.log(data);
       setHistoryData(data === null ? [] : JSON.parse(data));
     });
   }
@@ -88,29 +87,30 @@ export default function ResultsScreen({ navigation }) {
     /* Determine most likely type of condition */
     let indexOfMax = cancerData.indexOf(Math.max(...cancerData))
     let potentialType;
-    switch (indexOfMax) {
-      case 0:
-        setPotentialType({name: "Actinic Keratoses and Intraepithelial Carcinomae (Cancerous)", description: descriptions[0], article: articles[0]});
-        break;
-      case 1:
-        setPotentialType({name: "Basal Cell Carcinoma (Cancerous)", description: descriptions[1], article: articles[1]});
-        break;
-      case 2:
-        setPotentialType({name: "Benign Keratosis-like Lesions (Non-Cancerous)", description: descriptions[2], article: articles[2]});
-        break;
-      case 3:
-        setPotentialType({name: "Dermatofibroma (Non-Cancerous)", description: descriptions[3], article: articles[3]});
-        break;
-      case 4:
-        setPotentialType({name: "Melanocytic Nevi (Non-Cancerous)", description: descriptions[4], article: articles[4]});
-        break;
-      case 5:
-        setPotentialType({name: "Pyogenic Granulomas and Hemorrhage (Non-Cancerous)", description: descriptions[5], article: articles[5]});
-        break;
-      case 6:
-        setPotentialType({name: "Melanoma (Cancerous)", description: descriptions[6], article: articles[6]});
-        break;
-    }
+    setPotentialType({ name: map[indexOfMax].title, description: map[indexOfMax].description, article: map[indexOfMax].article });
+    // switch (indexOfMax) {
+    //   case 0:
+    //     setPotentialType({name: "Actinic Keratoses and Intraepithelial Carcinomae (Cancerous)", description: descriptions[0], article: articles[0]});
+    //     break;
+    //   case 1:
+    //     setPotentialType({name: "Basal Cell Carcinoma (Cancerous)", description: descriptions[1], article: articles[1]});
+    //     break;
+    //   case 2:
+    //     setPotentialType({name: "Benign Keratosis-like Lesions (Non-Cancerous)", description: descriptions[2], article: articles[2]});
+    //     break;
+    //   case 3:
+    //     setPotentialType({name: "Dermatofibroma (Non-Cancerous)", description: descriptions[3], article: articles[3]});
+    //     break;
+    //   case 4:
+    //     setPotentialType({name: "Melanocytic Nevi (Non-Cancerous)", description: descriptions[4], article: articles[4]});
+    //     break;
+    //   case 5:
+    //     setPotentialType({name: "Pyogenic Granulomas and Hemorrhage (Non-Cancerous)", description: descriptions[5], article: articles[5]});
+    //     break;
+    //   case 6:
+    //     setPotentialType({name: "Melanoma (Cancerous)", description: descriptions[6], article: articles[6]});
+    //     break;
+    // }
 
     let riskCalc = ((cancerData[0] + cancerData[1] + cancerData[6]) * 100).toFixed(2);
 
@@ -136,17 +136,17 @@ export default function ResultsScreen({ navigation }) {
         </View>
 
         <Card style={styles.card}>
-          <Text style = {styles.description}>
-              {potentialType.description}
+          <Text style={styles.description}>
+            {potentialType.description}
           </Text>
-            <Text style = {{fontSize: 10}}>
-              Click here for an article with reference images and more detailed information.
-            </Text>
-            <Icon
-              source={'link'} 
-              color='black'
-              size={24}
-            />
+          <Text style={{ fontSize: 10 }}>
+            Click here for an article with reference images and more detailed information.
+          </Text>
+          <Icon
+            source={'link'}
+            color='black'
+            size={24}
+          />
         </Card>
 
         <Card style={styles.card}>
@@ -213,7 +213,7 @@ export default function ResultsScreen({ navigation }) {
                 {/* Hide if data is not here */}
                 {historyData.length > 0 &&
                   <View>
-                    <Text variant="bodyLarge" style={{ fontWeight: "bold", textAlign: "center", margin: 10 }}>Add to existing mole</Text>
+                    <Text variant="bodyLarge" style={{ fontWeight: "bold", textAlign: "center", margin: 10 }}>Add to existing entry</Text>
                     {/* Inputs */}
                     <SectionList
                       showsVerticalScrollIndicator={false}
@@ -231,15 +231,13 @@ export default function ResultsScreen({ navigation }) {
                       renderItem={({ item, index }) => {
                         return (
                           // Renders each image in data
-                          <View style={{ margin: 10 }}>
-                            <View style={{ flexDirection: "row", flex: 1, alignSelf: "center", alignItems: 'center', gap: 30 }}>
-                              <Image style={{ borderRadius: 10, height: 100, width: undefined, aspectRatio: 1 }} resizeMode="cover" source={{ uri: item.image }} />
-                              {/* Vertical */}
-                              <View style={{ gap: 4 }}>
-                                <Text>{item.date}</Text>
-                                <Text>{item.index}</Text>
-                                <Text><Text style={{ fontWeight: "bold" }}>{item.percent}%</Text> confidence</Text>
-                              </View>
+                          <View style={{ margin: 10, flexDirection: "row", alignItems: 'center', gap: 30 }}>
+                            <Image style={{ borderRadius: 10, height: 100, width: undefined, aspectRatio: 1 }} resizeMode="cover" source={{ uri: item.image }} />
+                            {/* Vertical */}
+                            <View style={{ gap: 10, flexShrink: 1 }}>
+                              <Text style={{ fontWeight: "bold" }}>{map[item.index].title}</Text>
+                              <Text><Text style={{ fontWeight: "bold" }}>{item.percent}%</Text> confidence</Text>
+                              <Text>{item.date}</Text>
                             </View>
                           </View>
                         )
