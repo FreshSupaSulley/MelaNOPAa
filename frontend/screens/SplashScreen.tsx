@@ -19,7 +19,7 @@ export default function SplashScreen({ navigation }) {
             tabLabel: 'Step 1',
             component: (
                 <View style={{ flex: 1 }}>
-                    <Banner elevation={5} style={{ borderRadius: 10, margin: 8, marginTop: 0 }} visible><Text variant="titleLarge" style={{ fontWeight: "bold" }}>1. Locate a mole</Text></Banner>
+                    <Banner elevation={5} style={{ borderRadius: 10, margin: 8, marginTop: 0 }} visible><Text variant="titleLarge" style={{ fontWeight: "bold" }}>1. Locate a mole or lesion</Text></Banner>
                     <ScrollView showsVerticalScrollIndicator={false} style={{ padding: 10 }}>
                         <Card style={{ margin: 10 }}>
                             <Image style={{ width: '100%', height: 200 }} resizeMode="center" source={require('../assets/step1.png')} />
@@ -77,7 +77,7 @@ export default function SplashScreen({ navigation }) {
                             <Text variant="titleLarge" style={{ marginBottom: 10 }}>Our AI models can diagnose multiple types of skin cancer, including:</Text>
                             <Card mode="outlined">
                                 <Card.Content>
-                                    <Text variant="bodyMedium">Actinic keratosis, basal cell carcinoma, dermatofibroma, melanoma, nevus, pigmented benign keratosis, seborrheic keratosis, squamous cell carcinoma, and vascular lesion.</Text>
+                                    <Text variant="bodyMedium">Actinic keratosis, Basal cell carcinoma, Melanoma, and Pyogenic granulomas and hemorrhage.</Text>
                                 </Card.Content>
                             </Card>
                             <Text style={{ marginTop: 10 }} variant="bodyMedium"><Text style={{ fontWeight: "bold" }}>Note</Text>: Any malignant diagnoses should be followed up with a medical professional.</Text>
