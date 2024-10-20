@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import { Appearance, SafeAreaView, StatusBar, View } from "react-native";
 import { PaperProvider } from "react-native-paper";
@@ -11,6 +12,8 @@ export default function App() {
   colorScheme = "dark";
   // Define theme
   let theme = colorScheme == "light" ? Theme.lightTheme : Theme.darkTheme
+  // Clear data
+  // AsyncStorage.clear();
   return (
     <PaperProvider theme={theme}>
       <StatusBar />
