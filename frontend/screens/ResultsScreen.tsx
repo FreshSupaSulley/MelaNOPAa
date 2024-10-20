@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRoute } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { Alert, ImageBackground, Image, Modal, Pressable, SafeAreaView, ScrollView, SectionList, StyleSheet, TouchableOpacity, View } from "react-native";
 import Collapsible from "react-native-collapsible";
@@ -121,6 +122,23 @@ export default function ResultsScreen({ navigation }) {
 
     findColor(riskCalc);
   };
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('data');
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      // error reading value
+    }
+  };
+    
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('data', value)
+    } catch (e) {
+        
+    }
+  }
 
   return (
     <View style={{ flex: 1 }}>
