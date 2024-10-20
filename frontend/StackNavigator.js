@@ -78,7 +78,7 @@ function Navigation() {
         {/* Loading */}
         <Stack.Screen name="Loading" component={LoadingScreen} options={{ animation: 'fade' }} />
         {/* Results */}
-        <Stack.Screen name="Results" component={ResultsScreen} options={{ animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="Results" component={ResultsScreen} options={{ animation: 'ios' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

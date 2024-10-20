@@ -51,23 +51,27 @@ export default function MapScreen({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       <Banner
+        style={{ borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}
+        elevation={5}
         visible={true}
         icon="information"
       >
-        Disclaimer: The information provided here is intended for preliminary screening purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.
+        <Text style={{ fontWeight: "bold" }}>Disclaimer</Text>: The information provided here is intended for preliminary screening purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.
       </Banner>
+      {/* Info on the info screen */}
+      <Text variant="bodyMedium" style={{ margin: 10, marginTop: 30 }}>These are the lesions our model is trained to detect. Each type of lesion is categorized as cancerous or non-cancerous. <Text style={{ fontWeight: "bold" }}>Not all are dangerous.</Text></Text>
       {diseases.map((disease, index) => (
         <Card key={index} style={styles.card} mode="outlined">
-        <Card.Content>
-          <Text style={styles.title}>{disease.name}</Text>
-          <Text style={styles.subtitle}>{`Type: ${disease.type}`}</Text>
-          <Text style={styles.description}>{disease.description}</Text>
-          <Text style={styles.symptomsTitle}>Symptoms:</Text>
-          {disease.symptoms.map((symptom, idx) => (
-            <Text key={idx} style={styles.symptom}>{`${idx + 1}. ${symptom}`}</Text>
-          ))}
-        </Card.Content>
-      </Card>
+          <Card.Content>
+            <Text style={styles.title}>{disease.name}</Text>
+            <Text style={styles.subtitle}>{`Type: ${disease.type}`}</Text>
+            <Text style={styles.description}>{disease.description}</Text>
+            <Text style={styles.symptomsTitle}>Symptoms:</Text>
+            {disease.symptoms.map((symptom, idx) => (
+              <Text key={idx} style={styles.symptom}>{`${idx + 1}. ${symptom}`}</Text>
+            ))}
+          </Card.Content>
+        </Card>
       ))}
     </ScrollView>
   );

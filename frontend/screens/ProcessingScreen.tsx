@@ -43,7 +43,7 @@ export default function MapScreen({ navigation }) {
       {/* Buttons */}
       <View style={{ alignItems: "center", bottom: 0, padding: 30, gap: 10, width: "100%" }}>
         <Text style={{ color: "white", textAlign: "center" }}>This program is experimental. Any malignant diagnosis should be brought to a medicial professional for proper analysis.</Text>
-        <Checkbox.Item mode="android" onPress={() => { setChecked(!checked); }} label="I understand" status={checked ? 'checked' : 'unchecked'} />
+        <Checkbox.Item mode="android" position="leading" onPress={() => { setChecked(!checked); }} label="I understand" status={checked ? 'checked' : 'unchecked'} />
         <Button style={{ width: "100%" }} disabled={!checked} icon="send" mode="contained" onPress={analyze}>Analyze</Button>
       </View>
     </View>

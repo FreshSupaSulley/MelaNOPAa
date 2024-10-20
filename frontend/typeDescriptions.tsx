@@ -1,4 +1,3 @@
-
 export default [
     {
         title: "Actinic Keratoses and Intraepithelial Carcinomae",
