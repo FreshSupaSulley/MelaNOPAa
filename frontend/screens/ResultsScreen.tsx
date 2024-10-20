@@ -1,8 +1,10 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from 'react';
-import { Alert, ImageBackground, Modal, Pressable, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, ImageBackground, Image, Modal, Pressable, SafeAreaView, ScrollView, SectionList, StyleSheet, TouchableOpacity, View } from "react-native";
 import Collapsible from "react-native-collapsible";
-import { Button, Card, DataTable, IconButton, Text, TextInput } from "react-native-paper";
+import { Button, Card, DataTable, Icon, IconButton, RadioButton, Text, TextInput } from "react-native-paper";
+// import { AsyncStorage } from '@react-native-async-storage/async-storage';
 
 export default function ResultsScreen({ navigation }) {
   const route = useRoute();
@@ -13,6 +15,9 @@ export default function ResultsScreen({ navigation }) {
   const [potentialType, setPotentialType] = useState("");
   const [riskColor, setRiskColor] = useState("white");
   const [modalVisible, setModalVisible] = useState(false);
+  const [historyText, setHistoryText] = useState("");
+  const [checked, setChecked] = React.useState('first');
+  const [historyData, setHistoryData] = useState([]);
 
   useEffect(() => {
     // Image processing
@@ -20,7 +25,16 @@ export default function ResultsScreen({ navigation }) {
     setPhoto(route.params?.['image']);
     setCancerData(route.params?.['data'].data);
     calculateRisks(route.params?.['data'].data);
+    // Update history data for section list
+    updateHistoryData();
   }, [route.params]);
+
+  function updateHistoryData() {
+    // Fetch data
+    AsyncStorage.getItem("data").then((data) => {
+      setHistoryData(data === null ? [] : JSON.parse(data));
+    });
+  }
 
   function findColor(risk) {
     // Get constant to multiply by
@@ -28,9 +42,49 @@ export default function ResultsScreen({ navigation }) {
     // Calculating RGB values
     let red = ((210 - 75) * ratio) + 75;
     let green = (210 - 75) * (1 - ratio) + 75;
-    console.log(red + " " + green, ratio);
     // Set color state
     setRiskColor(`rgb(${red}, ${green}, 75)`);
+  }
+
+  async function saveModal() {
+    // Save
+    await AsyncStorage.setItem(
+      'data',
+      JSON.stringify([...historyData,
+      {
+        title: historyText,
+        data: [{
+          image: photo,
+          date: "today",
+          index: cancerData.indexOf(Math.max(...cancerData)),
+          percent: risk
+        }]
+      }
+      ]),
+    );
+    setModalVisible(false);
+    navigation.navigate("CameraScreen");
+  }
+
+  async function saveOption(index) {
+    alert(index);
+    if(true) return;
+    await AsyncStorage.setItem(
+      'data',
+      JSON.stringify([...historyData,
+      {
+        title: historyText,
+        data: [{
+          image: photo,
+          date: "today",
+          index: cancerData.indexOf(Math.max(...cancerData)),
+          percent: risk
+        }]
+      }
+      ]),
+    );
+    setModalVisible(false);
+    navigation.navigate("CameraScreen");
   }
 
   function calculateRisks(cancerData) {
@@ -136,25 +190,55 @@ export default function ResultsScreen({ navigation }) {
         {/* Save modal */}
         <Modal
           animationType="slide"
-          transparent={true}
           visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={{flex: 1}}>
-            <View style={{}}>
-              <Text style={{}}>Hello World!</Text>
-              {/* <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </Pressable> */}
+          onShow={() => updateHistoryData()}
+        >
+          <SafeAreaView>
+            <Button textColor='white' style={{ width: 100, margin: 10, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} mode="contained" onPress={() => setModalVisible(false)}>Cancel</Button>
+            <View style={{ padding: 10, paddingTop: 50, gap: 10 }}>
+              <Text variant="titleLarge" style={{ fontWeight: "bold", color: "black", textAlign: "center" }}>Save the mole for tracking.</Text>
+              <Text variant="bodyMedium" style={{ color: "black", textAlign: "center" }}>All information remains local to your phone.</Text>
+              <Card style={[styles.card, { margin: 0, padding: 20, paddingTop: 6 }]}>
+                {/* Hide if data is not here */}
+                {historyData.length > 0 &&
+                  <View>
+                    <Text variant="bodyLarge" style={{ textAlign: "center", margin: 10 }}>Add to existing mole</Text>
+                    {/* Inputs */}
+                    <SectionList
+                      showsVerticalScrollIndicator={false}
+                      style={{ maxHeight: 200, marginBottom: 10, padding: 20, borderRadius: 10, backgroundColor: "black" }}
+                      sections={historyData}
+                      renderItem={({ item, index }) => {
+                        return (
+                          <View>
+                            <View style={{ flexDirection: "row", flex: 1, alignSelf: "center", alignItems: 'center', gap: 30 }}>
+                              <Image style={{ height: 100, width: undefined, aspectRatio: 1 }} resizeMode="cover" source={{ uri: item.image }} />
+                              {/* Vertical */}
+                              <View style={{ gap: 4 }}>
+                                <Text style={{ fontWeight: "bold" }} variant="titleLarge">{historyData[index].title}</Text>
+                                <Text>{item.date}</Text>
+                                <Text>{item.index}</Text>
+                                <Text><Text style={{ fontWeight: "bold" }}>{item.percent}%</Text> confidence</Text>
+                              </View>
+                            </View>
+                            {/* Select button */}
+                            <Button textColor="white" style={{ margin: 8 }} mode="outlined" onPress={() => saveOption(index)}>Select {JSON.stringify(item.index)}</Button>
+                          </View>
+                        )
+                      }}>
+                    </SectionList>
+                  </View>
+                }
+                {/* Custom text */}
+                <Text variant="bodyLarge" style={{ textAlign: "center", margin: 10 }}>Create entry</Text>
+                <TextInput value={historyText} onChangeText={text => setHistoryText(text)} placeholder="Mole Data" />
+              </Card>
+              <Button icon={"history"} style={{ margin: 10 }} mode="contained" onPress={() => saveModal()}>Save</Button>
             </View>
-          </View>
+          </SafeAreaView>
         </Modal>
         {/* Show save modal */}
-        {/* <Button textColor='white' style={{ position: "absolute", margin: 10, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} mode="contained" onPress={() => navigation.navigate("CameraScreen")}>Back</Button> */}
+        <Button icon={"history"} style={{ margin: 10 }} mode="contained" onPress={() => setModalVisible(true)}>Save to History</Button>
       </ScrollView>
       <Button textColor='white' style={{ position: "absolute", margin: 10, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} mode="contained" onPress={() => navigation.navigate("CameraScreen")}>Back</Button>
     </View>

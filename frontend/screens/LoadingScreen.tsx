@@ -18,7 +18,7 @@ export default function MapScreen({ navigation }) {
     const reader = new FileReader();
     reader.onloadend = async () => {
       const base64data = reader.result;
-      fetch("https://solid-eagles-read.loca.lt/freakyPics", {
+      fetch("https://proud-paws-mix.loca.lt/freakyPics", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export default function MapScreen({ navigation }) {
   return (
     <View style={{ gap: 10, margin: 10, flex: 1, alignContent: "center", alignItems: "center", justifyContent: "center" }}>
       <Text style={{ fontWeight: "bold" }} variant="titleLarge">Processing...</Text>
-      <Text style={{ marginVertical: 15, margin: 50, textAlign: "center" }}>Our advanced neural network is processing your image.</Text>
+      <Text style={{ marginVertical: 15, margin: 50, textAlign: "center" }}>Our AI model is processing your image.</Text>
       <ActivityIndicator size={"large"} />
     </View>
   );
