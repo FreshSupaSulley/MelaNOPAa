@@ -1,7 +1,7 @@
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 import { Image, ImageBackground, Text, View } from "react-native";
-import { Button, Checkbox, IconButton, MD3Colors, useTheme } from "react-native-paper";
+import { Button, Checkbox, IconButton, MD3Colors, TextInput, useTheme } from "react-native-paper";
 import Svg, { Rect } from 'react-native-svg';
 import ImagePicker from 'react-native-image-crop-picker';
 
