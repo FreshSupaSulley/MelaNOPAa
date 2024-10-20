@@ -43,7 +43,7 @@ export default function CameraScreen({ navigation }) {
     return (
       <View style={{ alignItems: "center", alignContent: "center", flex: 1 }}>
         <Text>Enable camera permission to scan.</Text>
-        {/* <Button style={{ margin: 20 }} onPress={requestPermission} icon="camera" mode="contained">Enable Camera</Button> */}
+        <Button style={{ margin: 20 }} onPress={requestPermission} icon="camera" mode="contained">Enable Camera</Button>
       </View>
     );
   }

@@ -1,8 +1,8 @@
 import { useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, ImageBackground, Modal, Pressable, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import Collapsible from "react-native-collapsible";
-import { Card, DataTable, IconButton, Button, Text } from "react-native-paper";
+import { Button, Card, DataTable, IconButton, Text, TextInput } from "react-native-paper";
 
 export default function ResultsScreen({ navigation }) {
   const route = useRoute();
@@ -12,6 +12,7 @@ export default function ResultsScreen({ navigation }) {
   const [risk, setRisk] = useState("");
   const [potentialType, setPotentialType] = useState("");
   const [riskColor, setRiskColor] = useState("white");
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     // Image processing
@@ -21,18 +22,15 @@ export default function ResultsScreen({ navigation }) {
     calculateRisks(route.params?.['data'].data);
   }, [route.params]);
 
-  function findColor(risk){
-
+  function findColor(risk) {
     // Get constant to multiply by
-    let ratio = risk/100;
-
+    let ratio = risk / 100;
     // Calculating RGB values
-    let red = ((210-75) * ratio) + 75;
-    let green = (210-75) * (1 - ratio) + 75;
+    let red = ((210 - 75) * ratio) + 75;
+    let green = (210 - 75) * (1 - ratio) + 75;
     console.log(red + " " + green, ratio);
     // Set color state
     setRiskColor(`rgb(${red}, ${green}, 75)`);
-
   }
 
   function calculateRisks(cancerData) {
@@ -71,20 +69,15 @@ export default function ResultsScreen({ navigation }) {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, padding: 0 }}>
-        <View style={{ flex: 1}}>
-          <ImageBackground style={{ flex: 1, width: '100%', height: 400}} resizeMode="cover" source={{ uri: photo }}>
-          <Button textColor='white' style={{ position: "absolute", backgroundColor: 'rgba(0, 0, 0, 0.5)'}} mode="contained" onPress={() => navigation.navigate("CameraScreen")}>Back</Button>
+        <View style={{ flex: 1 }}>
+          <ImageBackground style={{ flex: 1, width: '100%', height: 400 }} resizeMode="cover" source={{ uri: photo }}>
             <View style={{ position: "absolute", padding: 10, backgroundColor: 'rgba(0, 0, 0, 0.5)', width: '100%', flex: 1, bottom: 0 }}>
               <Text style={styles.title}>
-                Skin Cancer Risk:<Text style={{fontSize: 23, fontWeight: 'bold', paddingBottom: 10, color: riskColor}}> {risk}%.</Text>
+                Skin Cancer Risk:<Text style={{ fontSize: 23, fontWeight: 'bold', paddingBottom: 10, color: riskColor }}> {risk}%.</Text>
               </Text>
-
-              <Text style={styles.subtitle}>
-                Potential Type:
-              </Text>
-              <Text style={styles.description}>
+              <Text variant="titleSmall">
                 {potentialType}
               </Text>
             </View>
@@ -140,7 +133,30 @@ export default function ResultsScreen({ navigation }) {
           </Collapsible>
 
         </Card>
+        {/* Save modal */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            setModalVisible(!modalVisible);
+          }}>
+          <View style={{flex: 1}}>
+            <View style={{}}>
+              <Text style={{}}>Hello World!</Text>
+              {/* <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}>
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </Pressable> */}
+            </View>
+          </View>
+        </Modal>
+        {/* Show save modal */}
+        {/* <Button textColor='white' style={{ position: "absolute", margin: 10, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} mode="contained" onPress={() => navigation.navigate("CameraScreen")}>Back</Button> */}
       </ScrollView>
+      <Button textColor='white' style={{ position: "absolute", margin: 10, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} mode="contained" onPress={() => navigation.navigate("CameraScreen")}>Back</Button>
     </View>
   );
 }
@@ -164,7 +180,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 23,
     fontWeight: 'bold',
-    paddingBottom: 10,
+    paddingBottom: 6,
   },
   subtitle: {
     fontSize: 20,
