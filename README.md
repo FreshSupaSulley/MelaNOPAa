@@ -1,4 +1,4 @@
-# MelaNOPAa
+# MelaNOPAa - HackOHI/O 2024
 
 MelaNOPAa is a cutting-edge React Native mobile application designed to detect skin cancer early by leveraging advanced machine learning technologies. This application aims to provide an easily accessible tool for users to screen skin lesions using their mobile devices.
 
