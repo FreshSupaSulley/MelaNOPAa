@@ -53,7 +53,7 @@ export default function SplashScreen({ navigation }) {
                 <View style={{ flex: 1 }}>
                     <Banner elevation={5} style={{ borderRadius: 10, margin: 8, marginTop: 0 }} visible><Text variant="titleLarge" style={{ fontWeight: "bold" }}>2. Upload to our AI</Text></Banner>
                     <ScrollView showsVerticalScrollIndicator={false} style={{ padding: 10 }}>
-                        <Image style={{ width: '100%', height: '90%' }} resizeMode="contain" source={require('../assets/step2.png')} />
+                        <Image style={{ width: '100%', height: '100%' }} resizeMode="contain" source={require('../assets/step2.png')} />
                         {/* Look out for */}
                         <View style={{ margin: 10 }}>
                             <Text variant="bodyMedium">We'll use our proprietary AI model trained on a dataset with thousands of images to give an accurate diagnosis. <Text variant="bodyMedium" style={{ fontWeight: "bold" }}>Your data is never stored, only processed by our models.</Text></Text>

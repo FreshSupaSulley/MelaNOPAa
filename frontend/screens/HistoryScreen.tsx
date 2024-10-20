@@ -8,7 +8,7 @@ export default function MapScreen({ navigation }) {
     <View style={{ flex: 1, padding: 0, margin: 0 }}>
       <Banner elevation={5} style={{ borderRadius: 10, margin: 8, marginTop: 0, marginBottom: 0 }} visible><Text variant="titleLarge" style={{ fontWeight: "bold" }}>History</Text></Banner>
       <ScrollView showsVerticalScrollIndicator={false} style={{ padding: 10 }}>
-        <Image style={{ width: '100%', height: '78%' }} resizeMode="contain" source={require('../assets/step3.png')} />
+        <Image style={{ width: '100%', height: '80%' }} resizeMode="contain" source={require('../assets/history.png')} />
         {/* Look out for */}
         <View style={{ margin: 5, flex: 1, justifyContent: "space-between" }}>
           <Text variant="titleLarge" style={{ marginBottom: 10 }}>Our AI models can diagnose multiple types of skin cancer, including:</Text>
